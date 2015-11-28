@@ -24,7 +24,6 @@
 		55715AB21C095438003B6A65 /* MyReferenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715A9D1C095438003B6A65 /* MyReferenceViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55715AB31C095438003B6A65 /* MyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715A9F1C095438003B6A65 /* MyViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55715AB41C095438003B6A65 /* NewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AA21C095438003B6A65 /* NewsViewController.m */; settings = {ASSET_TAGS = (); }; };
-		55715AB51C095438003B6A65 /* RadioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AA51C095438003B6A65 /* RadioViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55715AB61C095438003B6A65 /* BaseViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AA81C095438003B6A65 /* BaseViewModel.m */; settings = {ASSET_TAGS = (); }; };
 		55715AC31C095615003B6A65 /* SMS_SDKLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 55715ABA1C095615003B6A65 /* SMS_SDKLocalizable.strings */; settings = {ASSET_TAGS = (); }; };
 		55715AC41C095615003B6A65 /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55715ABC1C095615003B6A65 /* MOBFoundation.framework */; settings = {ASSET_TAGS = (); }; };
@@ -37,6 +36,16 @@
 		55715AD01C09585D003B6A65 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 55715ACF1C09585D003B6A65 /* libz.tbd */; };
 		55715AD41C097D9D003B6A65 /* WeatherNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AD31C097D9D003B6A65 /* WeatherNetManager.m */; settings = {ASSET_TAGS = (); }; };
 		55715AD81C097DC4003B6A65 /* WeatherViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AD71C097DC4003B6A65 /* WeatherViewModel.m */; settings = {ASSET_TAGS = (); }; };
+		55715ADD1C098361003B6A65 /* AlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715ADC1C098361003B6A65 /* AlbumModel.m */; settings = {ASSET_TAGS = (); }; };
+		55715AE01C098589003B6A65 /* RankListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715ADF1C098589003B6A65 /* RankListModel.m */; settings = {ASSET_TAGS = (); }; };
+		55715AE81C0986B0003B6A65 /* MusicViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AE71C0986B0003B6A65 /* MusicViewModel.m */; settings = {ASSET_TAGS = (); }; };
+		55715AEC1C09878B003B6A65 /* MusicNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AEB1C09878B003B6A65 /* MusicNetManager.m */; settings = {ASSET_TAGS = (); }; };
+		55715AF01C098AAD003B6A65 /* MusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AEF1C098AAD003B6A65 /* MusicViewController.m */; settings = {ASSET_TAGS = (); }; };
+		55715AF41C09A810003B6A65 /* MusicDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AF31C09A810003B6A65 /* MusicDetailCell.m */; settings = {ASSET_TAGS = (); }; };
+		55715AF71C09A84A003B6A65 /* MImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AF61C09A84A003B6A65 /* MImageView.m */; settings = {ASSET_TAGS = (); }; };
+		55715AFD1C09AAC6003B6A65 /* MusicCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AFC1C09AAC6003B6A65 /* MusicCategoryCell.m */; settings = {ASSET_TAGS = (); }; };
+		55715B001C09ABF2003B6A65 /* MusicCategoryViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715AFF1C09ABF2003B6A65 /* MusicCategoryViewModel.m */; settings = {ASSET_TAGS = (); }; };
+		55715B031C09ADCA003B6A65 /* MusicListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715B021C09ADCA003B6A65 /* MusicListViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55E1CAA61C094D86004F4934 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1CAA51C094D86004F4934 /* main.m */; };
 		55E1CAA91C094D86004F4934 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1CAA81C094D86004F4934 /* AppDelegate.m */; };
 		55E1CAB41C094D86004F4934 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55E1CAB21C094D86004F4934 /* LaunchScreen.storyboard */; };
@@ -75,8 +84,6 @@
 		55715A9F1C095438003B6A65 /* MyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyViewController.m; sourceTree = "<group>"; };
 		55715AA11C095438003B6A65 /* NewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsViewController.h; sourceTree = "<group>"; };
 		55715AA21C095438003B6A65 /* NewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsViewController.m; sourceTree = "<group>"; };
-		55715AA41C095438003B6A65 /* RadioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadioViewController.h; sourceTree = "<group>"; };
-		55715AA51C095438003B6A65 /* RadioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadioViewController.m; sourceTree = "<group>"; };
 		55715AA71C095438003B6A65 /* BaseViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewModel.h; sourceTree = "<group>"; };
 		55715AA81C095438003B6A65 /* BaseViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewModel.m; sourceTree = "<group>"; };
 		55715ABB1C095615003B6A65 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SMS_SDKLocalizable.strings; sourceTree = "<group>"; };
@@ -95,6 +102,27 @@
 		55715AD31C097D9D003B6A65 /* WeatherNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherNetManager.m; sourceTree = "<group>"; };
 		55715AD61C097DC4003B6A65 /* WeatherViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherViewModel.h; sourceTree = "<group>"; };
 		55715AD71C097DC4003B6A65 /* WeatherViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherViewModel.m; sourceTree = "<group>"; };
+		55715ADA1C098322003B6A65 /* MusicModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicModel.h; sourceTree = "<group>"; };
+		55715ADB1C098361003B6A65 /* AlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumModel.h; sourceTree = "<group>"; };
+		55715ADC1C098361003B6A65 /* AlbumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumModel.m; sourceTree = "<group>"; };
+		55715ADE1C098589003B6A65 /* RankListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankListModel.h; sourceTree = "<group>"; };
+		55715ADF1C098589003B6A65 /* RankListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankListModel.m; sourceTree = "<group>"; };
+		55715AE61C0986B0003B6A65 /* MusicViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewModel.h; sourceTree = "<group>"; };
+		55715AE71C0986B0003B6A65 /* MusicViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewModel.m; sourceTree = "<group>"; };
+		55715AEA1C09878B003B6A65 /* MusicNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicNetManager.h; sourceTree = "<group>"; };
+		55715AEB1C09878B003B6A65 /* MusicNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicNetManager.m; sourceTree = "<group>"; };
+		55715AEE1C098AAD003B6A65 /* MusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicViewController.h; sourceTree = "<group>"; };
+		55715AEF1C098AAD003B6A65 /* MusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicViewController.m; sourceTree = "<group>"; };
+		55715AF21C09A810003B6A65 /* MusicDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicDetailCell.h; sourceTree = "<group>"; };
+		55715AF31C09A810003B6A65 /* MusicDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicDetailCell.m; sourceTree = "<group>"; };
+		55715AF51C09A84A003B6A65 /* MImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MImageView.h; sourceTree = "<group>"; };
+		55715AF61C09A84A003B6A65 /* MImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageView.m; sourceTree = "<group>"; };
+		55715AFB1C09AAC6003B6A65 /* MusicCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicCategoryCell.h; sourceTree = "<group>"; };
+		55715AFC1C09AAC6003B6A65 /* MusicCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicCategoryCell.m; sourceTree = "<group>"; };
+		55715AFE1C09ABF2003B6A65 /* MusicCategoryViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicCategoryViewModel.h; sourceTree = "<group>"; };
+		55715AFF1C09ABF2003B6A65 /* MusicCategoryViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicCategoryViewModel.m; sourceTree = "<group>"; };
+		55715B011C09ADCA003B6A65 /* MusicListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicListViewController.h; sourceTree = "<group>"; };
+		55715B021C09ADCA003B6A65 /* MusicListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicListViewController.m; sourceTree = "<group>"; };
 		55E1CAA11C094D86004F4934 /* 子曰.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "子曰.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E1CAA51C094D86004F4934 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		55E1CAA71C094D86004F4934 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -157,6 +185,7 @@
 		55715A451C095355003B6A65 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				55715AD91C09829A003B6A65 /* Music */,
 				55715A461C095355003B6A65 /* Weather */,
 			);
 			path = Model;
@@ -171,14 +200,15 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
-		55715A511C095378003B6A65 /* NetworkManager */ = {
+		55715A511C095378003B6A65 /* NetManager */ = {
 			isa = PBXGroup;
 			children = (
 				55715AD11C097D9D003B6A65 /* Weather */,
+				55715AE91C098768003B6A65 /* Music */,
 				55715A521C095378003B6A65 /* BaseNetManager.h */,
 				55715A531C095378003B6A65 /* BaseNetManager.m */,
 			);
-			path = NetworkManager;
+			path = NetManager;
 			sourceTree = "<group>";
 		};
 		55715A601C0953D4003B6A65 /* Resources */ = {
@@ -203,6 +233,9 @@
 		55715A871C095438003B6A65 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				55715AF51C09A84A003B6A65 /* MImageView.h */,
+				55715AF61C09A84A003B6A65 /* MImageView.m */,
+				55715AF11C09A7E9003B6A65 /* Music */,
 				55715A881C095438003B6A65 /* My */,
 			);
 			path = View;
@@ -225,8 +258,8 @@
 				55715A911C095438003B6A65 /* Login */,
 				55715A961C095438003B6A65 /* Main */,
 				55715A991C095438003B6A65 /* My */,
+				55715AED1C098AAD003B6A65 /* Music */,
 				55715AA01C095438003B6A65 /* News */,
-				55715AA31C095438003B6A65 /* Radio */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -273,18 +306,10 @@
 			path = News;
 			sourceTree = "<group>";
 		};
-		55715AA31C095438003B6A65 /* Radio */ = {
-			isa = PBXGroup;
-			children = (
-				55715AA41C095438003B6A65 /* RadioViewController.h */,
-				55715AA51C095438003B6A65 /* RadioViewController.m */,
-			);
-			path = Radio;
-			sourceTree = "<group>";
-		};
 		55715AA61C095438003B6A65 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				55715AE51C098693003B6A65 /* Music */,
 				55715AD51C097DC4003B6A65 /* Weather */,
 				55715AA71C095438003B6A65 /* BaseViewModel.h */,
 				55715AA81C095438003B6A65 /* BaseViewModel.m */,
@@ -339,6 +364,60 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		55715AD91C09829A003B6A65 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				55715ADA1C098322003B6A65 /* MusicModel.h */,
+				55715ADB1C098361003B6A65 /* AlbumModel.h */,
+				55715ADC1C098361003B6A65 /* AlbumModel.m */,
+				55715ADE1C098589003B6A65 /* RankListModel.h */,
+				55715ADF1C098589003B6A65 /* RankListModel.m */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		55715AE51C098693003B6A65 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				55715AE61C0986B0003B6A65 /* MusicViewModel.h */,
+				55715AE71C0986B0003B6A65 /* MusicViewModel.m */,
+				55715AFE1C09ABF2003B6A65 /* MusicCategoryViewModel.h */,
+				55715AFF1C09ABF2003B6A65 /* MusicCategoryViewModel.m */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		55715AE91C098768003B6A65 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				55715AEA1C09878B003B6A65 /* MusicNetManager.h */,
+				55715AEB1C09878B003B6A65 /* MusicNetManager.m */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		55715AED1C098AAD003B6A65 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				55715AEE1C098AAD003B6A65 /* MusicViewController.h */,
+				55715AEF1C098AAD003B6A65 /* MusicViewController.m */,
+				55715B011C09ADCA003B6A65 /* MusicListViewController.h */,
+				55715B021C09ADCA003B6A65 /* MusicListViewController.m */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		55715AF11C09A7E9003B6A65 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				55715AF21C09A810003B6A65 /* MusicDetailCell.h */,
+				55715AF31C09A810003B6A65 /* MusicDetailCell.m */,
+				55715AFB1C09AAC6003B6A65 /* MusicCategoryCell.h */,
+				55715AFC1C09AAC6003B6A65 /* MusicCategoryCell.m */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
 		55E1CA981C094D86004F4934 = {
 			isa = PBXGroup;
 			children = (
@@ -365,9 +444,9 @@
 				55715A3B1C095326003B6A65 /* Define */,
 				55715A451C095355003B6A65 /* Model */,
 				55715A871C095438003B6A65 /* View */,
-				55715A901C095438003B6A65 /* ViewController */,
 				55715AA61C095438003B6A65 /* ViewModel */,
-				55715A511C095378003B6A65 /* NetworkManager */,
+				55715A901C095438003B6A65 /* ViewController */,
+				55715A511C095378003B6A65 /* NetManager */,
 				55715A601C0953D4003B6A65 /* Resources */,
 				55715A771C09541E003B6A65 /* Vendors */,
 				55E1CAA71C094D86004F4934 /* AppDelegate.h */,
@@ -537,23 +616,32 @@
 			files = (
 				55715AD41C097D9D003B6A65 /* WeatherNetManager.m in Sources */,
 				55715A491C095355003B6A65 /* WeatherModel.m in Sources */,
+				55715AF71C09A84A003B6A65 /* MImageView.m in Sources */,
+				55715AE81C0986B0003B6A65 /* MusicViewModel.m in Sources */,
 				55715A431C09533B003B6A65 /* Factory.m in Sources */,
 				55715AAC1C095438003B6A65 /* MyHeaderCell.m in Sources */,
 				55E1CAA91C094D86004F4934 /* AppDelegate.m in Sources */,
 				55715AB11C095438003B6A65 /* AboutViewController.m in Sources */,
 				55715AAB1C095438003B6A65 /* EditAccCell.m in Sources */,
+				55715AE01C098589003B6A65 /* RankListModel.m in Sources */,
 				55715AB61C095438003B6A65 /* BaseViewModel.m in Sources */,
 				55715AAE1C095438003B6A65 /* LoginViewController.m in Sources */,
 				55715AB21C095438003B6A65 /* MyReferenceViewController.m in Sources */,
 				55715AAF1C095438003B6A65 /* RegisterViewController.m in Sources */,
 				55715AB31C095438003B6A65 /* MyViewController.m in Sources */,
 				55715AD81C097DC4003B6A65 /* WeatherViewModel.m in Sources */,
-				55715AB51C095438003B6A65 /* RadioViewController.m in Sources */,
+				55715ADD1C098361003B6A65 /* AlbumModel.m in Sources */,
+				55715AF41C09A810003B6A65 /* MusicDetailCell.m in Sources */,
 				55E1CAA61C094D86004F4934 /* main.m in Sources */,
 				55715AB01C095438003B6A65 /* MainViewController.m in Sources */,
+				55715AF01C098AAD003B6A65 /* MusicViewController.m in Sources */,
 				55715AB41C095438003B6A65 /* NewsViewController.m in Sources */,
+				55715AEC1C09878B003B6A65 /* MusicNetManager.m in Sources */,
+				55715B001C09ABF2003B6A65 /* MusicCategoryViewModel.m in Sources */,
+				55715B031C09ADCA003B6A65 /* MusicListViewController.m in Sources */,
 				55715A561C095378003B6A65 /* BaseNetManager.m in Sources */,
 				55715A441C09533B003B6A65 /* NSObject+Common.m in Sources */,
+				55715AFD1C09AAC6003B6A65 /* MusicCategoryCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

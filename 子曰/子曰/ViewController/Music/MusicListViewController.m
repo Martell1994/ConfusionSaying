@@ -1,18 +1,18 @@
 //
-//  RadioViewController.m
+//  MusicListViewController.m
 //  子曰
 //
-//  Created by Martell on 15/11/3.
+//  Created by Martell on 15/11/28.
 //  Copyright © 2015年 Martell. All rights reserved.
 //
 
-#import "RadioViewController.h"
+#import "MusicListViewController.h"
 
-@interface RadioViewController ()
+@interface MusicListViewController ()
 
 @end
 
-@implementation RadioViewController
+@implementation MusicListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

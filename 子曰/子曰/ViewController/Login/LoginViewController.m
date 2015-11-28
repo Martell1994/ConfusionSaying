@@ -25,7 +25,6 @@
 initHUDView
 errorHUD
 
-
 - (NSString *)plistPath {
     if (!_plistPath) {
         NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;

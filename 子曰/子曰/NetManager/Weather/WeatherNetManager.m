@@ -14,7 +14,7 @@ static NSString *const key = @"858904ce87e84142633f6e29d6a5181b";
     cityName = [cityName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *path = [NSString stringWithFormat:@"http://op.juhe.cn/onebox/weather/query?cityname=%@&key=%@",cityName,key];
     return [self GET:path parameters:nil completionHandler:^(id responseObj, NSError *error) {
-        completionHandle([WeatherModel objectWithKeyValues:responseObj],error);
+        completionHandle([WeatherModel mj_objectWithKeyValues:responseObj],error);
     }];
 }
 @end

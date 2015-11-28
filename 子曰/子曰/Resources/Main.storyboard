@@ -354,10 +354,10 @@
             </objects>
             <point key="canvasLocation" x="1085.5" y="259.5"/>
         </scene>
-        <!--Radio View Controller-->
+        <!--Music View Controller-->
         <scene sceneID="4VT-RZ-CxH">
             <objects>
-                <viewController id="XZk-h9-Qnb" customClass="RadioViewController" sceneMemberID="viewController">
+                <viewController id="XZk-h9-Qnb" customClass="MusicViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Gdm-rX-Te2"/>
                         <viewControllerLayoutGuide type="bottom" id="MD8-eT-gvV"/>

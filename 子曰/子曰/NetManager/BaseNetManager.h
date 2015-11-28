@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define kCompletionHandle completionHandle:(void(^)(id model, NSError *error))completionHandle;
+
 @interface BaseNetManager : NSObject
 /** 对AFHTTPSessionManager的GET请求方法进行了封装 */
 + (id)GET:(NSString *)path parameters:(NSDictionary *)params completionHandler:(void(^)(id responseObj, NSError *error))complete;

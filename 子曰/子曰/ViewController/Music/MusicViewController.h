@@ -1,5 +1,5 @@
 //
-//  RadioViewController.h
+//  MusicViewController.h
 //  子曰
 //
 //  Created by Martell on 15/11/3.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RadioViewController : UIViewController
+@interface MusicViewController : UIViewController
 
 @end
