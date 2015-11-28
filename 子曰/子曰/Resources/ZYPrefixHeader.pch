@@ -1,0 +1,34 @@
+//
+//  ZYPrefixHeader.pch
+//  子曰
+//
+//  Created by Martell on 15/11/5.
+//  Copyright © 2015年 Martell. All rights reserved.
+//
+
+#ifndef ZYPrefixHeader_pch
+#define ZYPrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <BmobSDK/Bmob.h>
+#import <AFNetworking.h>
+#import <MJExtension.h>
+#import <Masonry.h>
+#import <SMS_SDK/SMSSDK.h>
+#import <BlocksKit.h>
+#import <BlocksKit+UIKit.h>
+#import <MBProgressHUD.h>
+#import "UIImageView+WebCache.h"
+#import "NSObject+Common.h"
+#import "MobClickSocialAnalytics.h"
+#import "MobClick.h"
+#import "Contants.h"
+#import "Factory.h"
+
+
+#define AppKey @"5632e64ee0f55a7d7800760b"
+#define smsKey @"bbdae8c67eff"
+#define smsSecret @"d1ba26eff1327ac7b70aebd6a65d6f31"
+#define bmobKey @"ecab3144fad86fd164d3d0ffe1852ed8"
+#endif /* ZYPrefixHeader_pch */

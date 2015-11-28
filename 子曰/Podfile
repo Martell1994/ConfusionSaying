@@ -1,0 +1,8 @@
+pod 'BmobSDK'
+pod 'Masonry'
+pod 'MJRefresh'
+pod 'BlocksKit'
+pod 'MBProgressHUD'
+pod 'SDWebImage'
+pod 'AFNetworking'
+pod 'MJExtension'

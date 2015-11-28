@@ -16,7 +16,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [SMSSDK registerApp:smsKey withSecret:smsSecret];
+    [Bmob registerWithAppKey:bmobKey];
     return YES;
 }
 
