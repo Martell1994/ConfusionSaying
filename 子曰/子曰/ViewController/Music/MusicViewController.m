@@ -101,8 +101,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    //MusicListViewController *vc = [[MusicListViewController alloc]initWithAlbumId:[self.musicCategoryVM albumIdForRow:indexPath.row]];
-    //[self.navigationController pushViewController:vc animated:YES];
+    MusicListViewController *vc = [[MusicListViewController alloc]initWithAlbumId:[self.musicCategoryVM albumIdForRow:indexPath.row]];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

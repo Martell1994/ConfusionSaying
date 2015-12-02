@@ -190,4 +190,36 @@
     return self;
 }
 
+
+- (DownloadMusicNetManager *)dlmNetManager{
+    if(!_dlmNetManager){
+        _dlmNetManager = [DownloadMusicNetManager new];
+    }
+    return _dlmNetManager;
+}
+
+/** 开始下载某行音频 */
+- (void)downLoadMusicURL:(NSURL *)url{
+    //    self.downloadBtn.enabled = NO;
+    [self.dlmNetManager methodDownloadURL:url];
+}
+
+/** 暂停下载 */
+- (void)downloadPause{
+    [self.dlmNetManager pauseDownload];
+}
+/** 继续下载 */
+- (void)downloadResume{
+    [self.dlmNetManager resumeDownload];
+}
+
+- (NSInteger)startOrFinish{
+    if(self.dlmNetManager.progress == 0){
+        return -1;
+    }else if(self.dlmNetManager.progress == 1){
+        return 1;
+    }else{
+        return 0;
+    }
+}
 @end

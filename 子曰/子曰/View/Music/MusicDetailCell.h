@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MImageView.h"
+#import "DownloadMusicNetManager.h"
 
 @interface MusicDetailCell : UITableViewCell
 /** 音乐封面图 */
@@ -28,4 +29,11 @@
 @property (nonatomic, strong) UILabel *durationLb;
 /** 下载按钮 */
 @property (nonatomic, strong) UIButton *downloadBtn;
+
+/** 下载某行音频 */
+- (void)downLoadMusicURL:(NSURL *)url;
+@property (nonatomic,strong) DownloadMusicNetManager *dlmNetManager;
+- (void)downloadPause;
+- (void)downloadResume;
+@property (nonatomic,assign) NSInteger startOrFinish;
 @end

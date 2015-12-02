@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MusicListViewController : UIViewController
-
+- (instancetype)initWithAlbumId:(NSInteger)albumId;
+@property (nonatomic, assign) NSInteger albumId;
 @end

@@ -62,6 +62,7 @@
 - (NSString *)titleForRow:(NSInteger)row {
     return [self modelForRow:row].title;
 }
+
 - (NSString *)timeForRow:(NSInteger)row {
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     NSTimeInterval delta = currentTime - [self modelForRow:row].createdAt / 1000;
