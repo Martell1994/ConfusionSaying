@@ -27,7 +27,7 @@
 #import "MobClick.h"
 #import "Contants.h"
 #import "Factory.h"
-
+#import "NSObject+Date.h"
 
 #define AppKey @"5632e64ee0f55a7d7800760b"
 #define smsKey @"bbdae8c67eff"

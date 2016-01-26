@@ -109,7 +109,7 @@ getPlistDic
         [self addJoinTimeLable];
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.plistPath]) {
             NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:self.plistPath];
-            _nameLabel.text = [dic objectForKey:@"userName"];
+            _nameLabel.text = [dic objectForKey:@"name"];
             _joinTimeLabel.text = [NSString stringWithFormat:@"%@加入",[dic objectForKey:@"createdTime"]];
         }
     }

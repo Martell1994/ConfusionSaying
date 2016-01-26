@@ -13,20 +13,24 @@
 - (UILabel *)orderLb {
     if(_orderLb == nil) {
         _orderLb = [[UILabel alloc] init];
-        _orderLb.font = [UIFont boldSystemFontOfSize:18];
+        _orderLb.font = LB20;
         _orderLb.textColor = [UIColor lightGrayColor];
         _orderLb.textAlignment = NSTextAlignmentCenter;
+        _orderLb.numberOfLines = 0;
         [self.contentView addSubview:_orderLb];
         //使用KVO-键值观察 如果test被赋值为1 颜色是...
         //下方方法:如果_orderLb的text属性 被赋新值 则触发task
         [_orderLb bk_addObserverForKeyPath:@"text" options:NSKeyValueObservingOptionNew task:^(id obj, NSDictionary *change) {
             NSString *value = change[@"new"];
             if ([value isEqualToString:@"1"]) {
+                _orderLb.text = @"状元";
                 _orderLb.textColor = [UIColor redColor];
             } else if ([value isEqualToString:@"2"]){
-                _orderLb.textColor = [UIColor blueColor];
+                _orderLb.text = @"榜眼";
+                _orderLb.textColor = kRGBColor(217, 210, 168);
             } else if ([value isEqualToString:@"3"]){
-                _orderLb.textColor = [UIColor greenColor];
+                _orderLb.text = @"探花";
+                _orderLb.textColor = kRGBColor(137, 159, 147);
             }else{
                 _orderLb.textColor = [UIColor blackColor];
             }
@@ -71,8 +75,8 @@
 - (UILabel *)descLb {
     if(_descLb == nil) {
         _descLb = [[UILabel alloc] init];
-        _descLb.font = [UIFont systemFontOfSize:15];
-        _descLb.textColor = [UIColor lightGrayColor];
+        _descLb.font = [UIFont systemFontOfSize:14];
+        _descLb.textColor = kRGBColor(126, 127, 126);
         [self.contentView addSubview:_descLb];
         [self.descLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(0);
@@ -87,7 +91,7 @@
     if(_numberLb == nil) {
         _numberLb = [[UILabel alloc] init];
         _numberLb.font = [UIFont systemFontOfSize:12];
-        _numberLb.textColor = [UIColor lightGrayColor];
+        _numberLb.textColor = kRGBColor(126, 127, 126);
         [self.contentView addSubview:_numberLb];
         [self.numberLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.numberIV.mas_right).mas_equalTo(2);

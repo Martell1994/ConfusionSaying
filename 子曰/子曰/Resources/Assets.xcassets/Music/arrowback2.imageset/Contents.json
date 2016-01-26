@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "arrowback2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "cell_bg_noData_1@2x.png",
       "scale" : "2x"
     },
     {

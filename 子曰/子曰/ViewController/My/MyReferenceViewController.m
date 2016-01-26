@@ -70,7 +70,7 @@ successHUD
     [super viewDidLoad];
     [Factory addBackItemToVC:self];
     //[[UITextField appearance] setFont:[UIFont fontWithName:@"melon" size:15]];
-    self.title = @"修改资料";
+    self.title = @"修改信息";
     self.view.backgroundColor = kRGBColor(240, 240, 240);
     [self addHeadImageView];
     [self addCameraImageView];
@@ -83,6 +83,7 @@ successHUD
         make.height.mas_equalTo(149);
     }];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"保存" style:UIBarButtonItemStyleDone target:self action:@selector(showWithLabel)];
+    self.navigationItem.rightBarButtonItem.tintColor = kRGBColor(110, 153, 106);
 }
 
 - (void)saveToBmobAndPlist {
@@ -105,9 +106,9 @@ successHUD
     EditAccChoice *sexCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
     //保存至Plist
     NSMutableDictionary *info = [[[NSMutableDictionary alloc] initWithContentsOfFile:_plistPath] mutableCopy];
-    [info setValue:nameCell.textField.text forKey:@"userName"];
+    [info setValue:nameCell.textField.text forKey:@"name"];
     [info setValue:pwdCell.textField.text forKey:@"pwd"];
-    [info setValue:sexCell.editLabel.text forKey:@"sex"];
+    [info setValue:sexCell.editLabel.text forKey:@"gender"];
     [info setValue:self.bmobFileURL forKey:@"headerImage"];
     //[info setValue:self.imageData forKey:@"headerImage"];
     [info writeToFile:self.plistPath atomically:YES];
@@ -115,7 +116,7 @@ successHUD
     BmobObject *user = [BmobObject objectWithoutDatatWithClassName:ZY_User objectId:[[self PlistDic] valueForKey:@"id"]];
     [user setObject:nameCell.textField.text forKey:@"userName"];
     [user setObject:pwdCell.textField.text forKey:@"userPwd"];
-    [user setObject:sexCell.editLabel.text forKey:@"userSex"];
+    [user setObject:sexCell.editLabel.text forKey:@"userGender"];
     [user setObject:self.bmobFileURL forKey:@"userImg"];
     [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
         if (isSuccessful) {
@@ -218,7 +219,7 @@ successHUD
     if (indexPath.row == 0) {
         EditAccCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
         cell.tipLabel.text = @"昵称";
-        cell.textField.text = [[self PlistDic] valueForKey:@"userName"];
+        cell.textField.text = [[self PlistDic] valueForKey:@"name"];
         [cell.textField setTag:0];
         return cell;
     } else if (indexPath.row == 1){
@@ -229,7 +230,7 @@ successHUD
         return cell;
     } else {
         EditAccChoice *cell = [tableView dequeueReusableCellWithIdentifier:@"Choice"];
-        cell.editLabel.text = [[self PlistDic] valueForKey:@"sex"];
+        cell.editLabel.text = [[self PlistDic] valueForKey:@"gender"];
         cell.tipLabel.text = @"性别";
         return cell;
     }

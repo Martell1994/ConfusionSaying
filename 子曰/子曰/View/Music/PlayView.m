@@ -22,7 +22,6 @@
 - (id)init {
     if (self = [super init]) {
         self.playBtn.hidden = NO;
-        //        self.backgroundColor = [UIColor redColor];
     }
     return self;
 }
@@ -34,7 +33,9 @@
         [_playBtn setBackgroundImage:[UIImage imageNamed:@"toolbar_pause_n_p"] forState:UIControlStateSelected];
         [self addSubview:_playBtn];
         [_playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.mas_equalTo(0);
+            make.centerX.mas_equalTo(0);
+            make.bottom.mas_equalTo(-40);
+            make.size.mas_equalTo(CGSizeMake(80, 80));
         }];
         [_playBtn bk_addEventHandler:^(UIButton *sender) {
             if (sender.selected) {
@@ -48,6 +49,20 @@
     return _playBtn;
 }
 
+- (UIButton *)backBtn {
+    if (!_backBtn) {
+        _backBtn = [[UIButton alloc] init];
+        [self addSubview:_backBtn];
+        [_backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(20);
+            make.left.mas_equalTo(10);
+            make.width.height.mas_equalTo(30);
+        }];
+        [_backBtn setBackgroundImage:[UIImage imageNamed:@"arrowback"] forState:UIControlStateNormal];
+    }
+    return _backBtn;
+}
+
 - (void)playWithURL:(NSURL *)musicURL {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     //激活
@@ -56,5 +71,17 @@
     [_player play];
     self.playBtn.selected = YES;
 }
+//- (void)playWithLocalUrl:(NSURL *)musicURL {
+//    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+//    //激活
+//    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+//    
+//    
+//    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:musicURL options:nil];
+//    AVPlayerItem *playerItem = [AVPlayerItem playerItemWithAsset:urlAsset];
+//    _player = [AVPlayer playerWithURL:musicURL];
+//    [_player play];
+//    self.playBtn.selected = YES;
+//}
 
 @end

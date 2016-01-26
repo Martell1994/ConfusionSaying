@@ -9,15 +9,28 @@
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
-
+@property (nonatomic, strong) NSString *songPlistPath;
 @end
 
 @implementation AppDelegate
 
+- (NSString *)songPlistPath {
+    if (!_songPlistPath) {
+        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        _songPlistPath = [path stringByAppendingPathComponent:@"song.plist"];
+    }
+    return _songPlistPath;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [SMSSDK registerApp:smsKey withSecret:smsSecret];
     [Bmob registerWithAppKey:bmobKey];
+    NSArray *arr = [NSArray new];
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.songPlistPath]) {
+        [arr writeToFile:self.songPlistPath atomically:YES];
+    }
+    
     return YES;
 }
 

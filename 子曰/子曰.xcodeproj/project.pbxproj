@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3AB63CF2D5335A70BBB5E686 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A878A3BA8AEE8FA510CE810B /* libPods.a */; };
+		551EDA671C54FFAE007A250D /* NSObject+Date.m in Sources */ = {isa = PBXBuildFile; fileRef = 551EDA661C54FFAE007A250D /* NSObject+Date.m */; settings = {ASSET_TAGS = (); }; };
+		5546D0D61C57633700096B23 /* AppDelegate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 5546D0D51C57633700096B23 /* AppDelegate+Category.m */; settings = {ASSET_TAGS = (); }; };
+		5546D0DD1C5785A000096B23 /* PlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5546D0DC1C5785A000096B23 /* PlayViewController.m */; settings = {ASSET_TAGS = (); }; };
+		5546D0E31C57AB6D00096B23 /* SmallPlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5546D0E21C57AB6D00096B23 /* SmallPlayView.m */; settings = {ASSET_TAGS = (); }; };
 		55715A431C09533B003B6A65 /* Factory.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715A401C09533B003B6A65 /* Factory.m */; settings = {ASSET_TAGS = (); }; };
 		55715A441C09533B003B6A65 /* NSObject+Common.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715A421C09533B003B6A65 /* NSObject+Common.m */; settings = {ASSET_TAGS = (); }; };
 		55715A491C095355003B6A65 /* WeatherModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 55715A481C095355003B6A65 /* WeatherModel.m */; settings = {ASSET_TAGS = (); }; };
@@ -49,13 +53,23 @@
 		558883711C0E80BC0074F7A7 /* PlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 558883701C0E80BC0074F7A7 /* PlayView.m */; settings = {ASSET_TAGS = (); }; };
 		558883731C0E81090074F7A7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 558883721C0E81090074F7A7 /* AVFoundation.framework */; };
 		558883761C0E83670074F7A7 /* DownloadMusicNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 558883751C0E83670074F7A7 /* DownloadMusicNetManager.m */; settings = {ASSET_TAGS = (); }; };
+		5588B6011C522E100002CD52 /* DownloadedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5588B6001C522E100002CD52 /* DownloadedViewController.m */; settings = {ASSET_TAGS = (); }; };
 		55E1CAA61C094D86004F4934 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1CAA51C094D86004F4934 /* main.m */; };
 		55E1CAA91C094D86004F4934 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E1CAA81C094D86004F4934 /* AppDelegate.m */; };
 		55E1CAB41C094D86004F4934 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55E1CAB21C094D86004F4934 /* LaunchScreen.storyboard */; };
 		55E1CABE1C0950F5004F4934 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 55E1CABD1C0950F5004F4934 /* Podfile */; settings = {ASSET_TAGS = (); }; };
+		55E789381C53DEC10004F3BA /* DownloadMusicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E789371C53DEC10004F3BA /* DownloadMusicCell.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		551EDA651C54FFAE007A250D /* NSObject+Date.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Date.h"; sourceTree = "<group>"; };
+		551EDA661C54FFAE007A250D /* NSObject+Date.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Date.m"; sourceTree = "<group>"; };
+		5546D0D41C57633700096B23 /* AppDelegate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+Category.h"; sourceTree = "<group>"; };
+		5546D0D51C57633700096B23 /* AppDelegate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+Category.m"; sourceTree = "<group>"; };
+		5546D0DB1C5785A000096B23 /* PlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayViewController.h; sourceTree = "<group>"; };
+		5546D0DC1C5785A000096B23 /* PlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayViewController.m; sourceTree = "<group>"; };
+		5546D0E11C57AB6D00096B23 /* SmallPlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallPlayView.h; sourceTree = "<group>"; };
+		5546D0E21C57AB6D00096B23 /* SmallPlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallPlayView.m; sourceTree = "<group>"; };
 		55715A3C1C095326003B6A65 /* Contants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contants.h; sourceTree = "<group>"; };
 		55715A3F1C09533B003B6A65 /* Factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Factory.h; sourceTree = "<group>"; };
 		55715A401C09533B003B6A65 /* Factory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Factory.m; sourceTree = "<group>"; };
@@ -131,6 +145,8 @@
 		558883721C0E81090074F7A7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		558883741C0E83670074F7A7 /* DownloadMusicNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadMusicNetManager.h; sourceTree = "<group>"; };
 		558883751C0E83670074F7A7 /* DownloadMusicNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadMusicNetManager.m; sourceTree = "<group>"; };
+		5588B5FF1C522E100002CD52 /* DownloadedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadedViewController.h; sourceTree = "<group>"; };
+		5588B6001C522E100002CD52 /* DownloadedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadedViewController.m; sourceTree = "<group>"; };
 		55E1CAA11C094D86004F4934 /* 子曰.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "子曰.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E1CAA51C094D86004F4934 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		55E1CAA71C094D86004F4934 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -138,6 +154,8 @@
 		55E1CAB31C094D86004F4934 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		55E1CAB51C094D86004F4934 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55E1CABD1C0950F5004F4934 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		55E789361C53DEC10004F3BA /* DownloadMusicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadMusicCell.h; sourceTree = "<group>"; };
+		55E789371C53DEC10004F3BA /* DownloadMusicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadMusicCell.m; sourceTree = "<group>"; };
 		A878A3BA8AEE8FA510CE810B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B837650C4EB587C6FF703557 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		F5360E591B548169E384D86B /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -175,6 +193,8 @@
 		55715A3D1C09533B003B6A65 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				55715A3F1C09533B003B6A65 /* Factory.h */,
+				55715A401C09533B003B6A65 /* Factory.m */,
 				55715A3E1C09533B003B6A65 /* Category */,
 			);
 			path = Util;
@@ -183,10 +203,12 @@
 		55715A3E1C09533B003B6A65 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				55715A3F1C09533B003B6A65 /* Factory.h */,
-				55715A401C09533B003B6A65 /* Factory.m */,
 				55715A411C09533B003B6A65 /* NSObject+Common.h */,
 				55715A421C09533B003B6A65 /* NSObject+Common.m */,
+				551EDA651C54FFAE007A250D /* NSObject+Date.h */,
+				551EDA661C54FFAE007A250D /* NSObject+Date.m */,
+				5546D0D41C57633700096B23 /* AppDelegate+Category.h */,
+				5546D0D51C57633700096B23 /* AppDelegate+Category.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -257,6 +279,8 @@
 				55715A8A1C095438003B6A65 /* EditAccCell.m */,
 				55715A8B1C095438003B6A65 /* MyHeaderCell.h */,
 				55715A8C1C095438003B6A65 /* MyHeaderCell.m */,
+				55E789361C53DEC10004F3BA /* DownloadMusicCell.h */,
+				55E789371C53DEC10004F3BA /* DownloadMusicCell.m */,
 			);
 			path = My;
 			sourceTree = "<group>";
@@ -302,6 +326,10 @@
 				55715A9D1C095438003B6A65 /* MyReferenceViewController.m */,
 				55715A9E1C095438003B6A65 /* MyViewController.h */,
 				55715A9F1C095438003B6A65 /* MyViewController.m */,
+				5588B5FF1C522E100002CD52 /* DownloadedViewController.h */,
+				5588B6001C522E100002CD52 /* DownloadedViewController.m */,
+				5546D0DB1C5785A000096B23 /* PlayViewController.h */,
+				5546D0DC1C5785A000096B23 /* PlayViewController.m */,
 			);
 			path = My;
 			sourceTree = "<group>";
@@ -427,6 +455,8 @@
 				55715AFC1C09AAC6003B6A65 /* MusicCategoryCell.m */,
 				5588836F1C0E80BC0074F7A7 /* PlayView.h */,
 				558883701C0E80BC0074F7A7 /* PlayView.m */,
+				5546D0E11C57AB6D00096B23 /* SmallPlayView.h */,
+				5546D0E21C57AB6D00096B23 /* SmallPlayView.m */,
 			);
 			path = Music;
 			sourceTree = "<group>";
@@ -631,14 +661,20 @@
 				55715AD41C097D9D003B6A65 /* WeatherNetManager.m in Sources */,
 				55715A491C095355003B6A65 /* WeatherModel.m in Sources */,
 				55715AF71C09A84A003B6A65 /* MImageView.m in Sources */,
+				5588B6011C522E100002CD52 /* DownloadedViewController.m in Sources */,
 				55715AE81C0986B0003B6A65 /* MusicViewModel.m in Sources */,
 				55715A431C09533B003B6A65 /* Factory.m in Sources */,
 				55715AAC1C095438003B6A65 /* MyHeaderCell.m in Sources */,
+				551EDA671C54FFAE007A250D /* NSObject+Date.m in Sources */,
+				5546D0D61C57633700096B23 /* AppDelegate+Category.m in Sources */,
+				55E789381C53DEC10004F3BA /* DownloadMusicCell.m in Sources */,
 				55E1CAA91C094D86004F4934 /* AppDelegate.m in Sources */,
 				55715AB11C095438003B6A65 /* AboutViewController.m in Sources */,
 				55715AAB1C095438003B6A65 /* EditAccCell.m in Sources */,
+				5546D0DD1C5785A000096B23 /* PlayViewController.m in Sources */,
 				558883761C0E83670074F7A7 /* DownloadMusicNetManager.m in Sources */,
 				55715AE01C098589003B6A65 /* RankListModel.m in Sources */,
+				5546D0E31C57AB6D00096B23 /* SmallPlayView.m in Sources */,
 				55715AB61C095438003B6A65 /* BaseViewModel.m in Sources */,
 				55715AAE1C095438003B6A65 /* LoginViewController.m in Sources */,
 				55715AB21C095438003B6A65 /* MyReferenceViewController.m in Sources */,

@@ -411,10 +411,10 @@
             </objects>
             <point key="canvasLocation" x="1537" y="3060"/>
         </scene>
-        <!--关于微信-->
+        <!--关于子曰-->
         <scene sceneID="boh-HW-W8q">
             <objects>
-                <viewController storyboardIdentifier="AboutZY" id="Qqe-eo-s7G" customClass="AboutViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AboutZY" id="Qqe-eo-s7G" userLabel="关于子曰" customClass="AboutViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="usU-ys-jC3"/>
                         <viewControllerLayoutGuide type="bottom" id="1Wx-Np-jQ4"/>
@@ -423,12 +423,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="register_logo" translatesAutoresizingMaskIntoConstraints="NO" id="1HB-T7-Rdn">
-                                <rect key="frame" x="125" y="60" width="95" height="115"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="115" id="Bnz-Qo-apf"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright©2015-2016 ZIYUE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngL-gF-3nb">
                                 <rect key="frame" x="50" y="517" width="225" height="21"/>
                                 <constraints>
@@ -438,25 +432,31 @@
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="register_logo" translatesAutoresizingMaskIntoConstraints="NO" id="1HB-T7-Rdn">
+                                <rect key="frame" x="125" y="100" width="95" height="115"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="115" id="Bnz-Qo-apf"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.92549019607843142" green="0.92549019607843142" blue="0.92549019607843142" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ngL-gF-3nb" firstAttribute="leading" secondItem="HFs-VL-KrG" secondAttribute="leading" constant="50" id="1bd-2P-AHW"/>
                             <constraint firstItem="1Wx-Np-jQ4" firstAttribute="top" secondItem="ngL-gF-3nb" secondAttribute="bottom" constant="30" id="PJr-42-uNZ"/>
+                            <constraint firstItem="1HB-T7-Rdn" firstAttribute="top" secondItem="HFs-VL-KrG" secondAttribute="top" constant="100" id="PuO-6R-Boo"/>
                             <constraint firstItem="1HB-T7-Rdn" firstAttribute="leading" secondItem="HFs-VL-KrG" secondAttribute="leading" constant="125" id="gQn-DY-jqG"/>
-                            <constraint firstItem="1HB-T7-Rdn" firstAttribute="top" secondItem="usU-ys-jC3" secondAttribute="bottom" constant="40" id="hZx-Mv-ffr"/>
                             <constraint firstAttribute="trailing" secondItem="ngL-gF-3nb" secondAttribute="trailing" constant="45" id="nme-P6-GaR"/>
                             <constraint firstAttribute="trailing" secondItem="1HB-T7-Rdn" secondAttribute="trailing" constant="100" id="td8-90-ONQ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="关于微信" id="P1M-Xc-76f"/>
+                    <navigationItem key="navigationItem" title="关于子曰" id="P1M-Xc-76f" userLabel="关于子曰"/>
                     <connections>
                         <outlet property="CRLabel" destination="ngL-gF-3nb" id="AT8-NP-DC1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W9m-Mc-quy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1980" y="3060"/>
+            <point key="canvasLocation" x="1928" y="3060"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="yqf-ps-kfF">

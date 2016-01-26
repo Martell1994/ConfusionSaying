@@ -49,12 +49,12 @@
     if(_timeLb == nil) {
         _timeLb = [[UILabel alloc] init];
         [self.contentView addSubview:_timeLb];
-        _timeLb.font=[UIFont systemFontOfSize:12];
-        _timeLb.textColor=[UIColor lightGrayColor];
+        _timeLb.font = [UIFont systemFontOfSize:13];
+        _timeLb.textColor = kRGBColor(126, 127, 126);
         [_timeLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(10);
+            make.top.mas_equalTo(15);
             make.right.mas_equalTo(-10);
-            make.width.mas_equalTo(50);
+            make.width.mas_equalTo(55);
         }];
         _timeLb.textAlignment=NSTextAlignmentRight;
     }
@@ -71,7 +71,7 @@
             make.rightMargin.mas_equalTo(self.titleLb.mas_rightMargin);
         }];
         _sourceLb.font=[UIFont systemFontOfSize:15];
-        _sourceLb.textColor=[UIColor lightGrayColor];
+        _sourceLb.textColor = kRGBColor(126, 127, 126);
     }
     return _sourceLb;
 }
@@ -90,55 +90,14 @@
         }];
         [_playCountLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(imageView);
-            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(3);
+            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(5);
         }];
-        _playCountLb.textColor=[UIColor lightGrayColor];
-        _playCountLb.font=[UIFont systemFontOfSize:10];
+        _playCountLb.textColor = kRGBColor(126, 127, 126);
+        _playCountLb.font = [UIFont systemFontOfSize:13];
     }
     return _playCountLb;
 }
 
-- (UILabel *)favorCountLb {
-    if(_favorCountLb == nil) {
-        _favorCountLb = [[UILabel alloc] init];
-        [self.contentView addSubview:_favorCountLb];
-        UIImageView *imageView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sound_likes_n"]];
-        [self.contentView addSubview:imageView];
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.mas_equalTo(self.playCountLb);
-            make.left.mas_equalTo(self.playCountLb.mas_right).mas_equalTo(7);
-            make.size.mas_equalTo(CGSizeMake(16, 16));
-        }];
-        _favorCountLb.textColor=[UIColor lightGrayColor];
-        _favorCountLb.font=[UIFont systemFontOfSize:10];
-        [_favorCountLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(3);
-            make.centerY.mas_equalTo(imageView);
-        }];
-    }
-    return _favorCountLb;
-}
-
-- (UILabel *)commentCountLb {
-    if(_commentCountLb == nil) {
-        _commentCountLb = [[UILabel alloc] init];
-        [self.contentView addSubview:_commentCountLb];
-        UIImageView *imageView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sound_comments"]];
-        [self.contentView addSubview:imageView];
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(16, 16));
-            make.left.mas_equalTo(self.favorCountLb.mas_right).mas_equalTo(7);
-            make.centerY.mas_equalTo(self.favorCountLb);
-        }];
-        [_commentCountLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.mas_equalTo(imageView);
-            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(3);
-        }];
-        _commentCountLb.textColor=[UIColor lightGrayColor];
-        _commentCountLb.font=[UIFont systemFontOfSize:10];
-    }
-    return _commentCountLb;
-}
 
 - (UILabel *)durationLb {
     if(_durationLb == nil) {
@@ -147,16 +106,16 @@
         UIImageView *imageView=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"sound_duration"]];
         [self.contentView addSubview:imageView];
         [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.commentCountLb.mas_right).mas_equalTo(7);
-            make.centerY.mas_equalTo(self.commentCountLb);
+            make.left.mas_equalTo(self.playCountLb.mas_right).mas_equalTo(15);
+            make.centerY.mas_equalTo(self.playCountLb);
             make.size.mas_equalTo(CGSizeMake(16, 16));
         }];
         [_durationLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(3);
+            make.left.mas_equalTo(imageView.mas_right).mas_equalTo(5);
             make.centerY.mas_equalTo(imageView);
         }];
-        _durationLb.font=[UIFont systemFontOfSize:10];
-        _durationLb.textColor=[UIColor lightGrayColor];
+        _durationLb.textColor = kRGBColor(126, 127, 126);
+        _durationLb.font = [UIFont systemFontOfSize:13];
     }
     return _durationLb;
 }
@@ -165,12 +124,9 @@
     if(_downloadBtn == nil) {
         _downloadBtn = [UIButton buttonWithType:0];
         [_downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_download"] forState:0];
-        [_downloadBtn bk_addEventHandler:^(id sender) {
-            NSLog(@"下载按钮被点击...");
-        } forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_downloadBtn];
         [_downloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.right.mas_equalTo(-5);
+            make.bottom.right.mas_equalTo(-10);
             make.size.mas_equalTo(CGSizeMake(30, 30));
         }];
     }
@@ -194,6 +150,7 @@
 - (DownloadMusicNetManager *)dlmNetManager{
     if(!_dlmNetManager){
         _dlmNetManager = [DownloadMusicNetManager new];
+        _dlmNetManager.delegate = self;
     }
     return _dlmNetManager;
 }
@@ -220,6 +177,23 @@
         return 1;
     }else{
         return 0;
+    }
+}
+
+- (void)tellyouProgress:(CGFloat)progress{
+//    NSLog(@"tell:%f",progress);
+    [self.delegate tellmeProgress:progress withCellTag:self.tag];
+}
+- (void)tellyouLocation:(NSURL *)location{
+    //以MP3格式保存
+    NSString *savaFileName = [self.titleLb.text stringByAppendingPathExtension:@"mp3"];
+    NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *rootPath = [docPath stringByAppendingPathComponent:@"Music"];
+    BOOL isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
+    if (isSuccess) {
+        NSString *filePath = [rootPath stringByAppendingPathComponent:savaFileName];
+        [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:filePath error:nil];
+        NSLog(@"filePath %@", filePath);
     }
 }
 @end

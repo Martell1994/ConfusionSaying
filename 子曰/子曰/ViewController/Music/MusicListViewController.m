@@ -7,23 +7,45 @@
 //
 
 #import "MusicListViewController.h"
+#import "PlayViewController.h"
 #import "MusicViewModel.h"
 #import "MusicDetailCell.h"
 #import "PlayView.h"
+#import "SmallPlayView.h"
 
-@interface MusicListViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface MusicListViewController ()<UITableViewDelegate,UITableViewDataSource,MusicDetailCellDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) MusicViewModel *musicVM;
 @property (nonatomic, strong) MusicDetailCell *cell;
+@property (nonatomic, strong) NSString *songPlistPath;
+@property (nonatomic, strong) NSMutableArray *cellArr;
+@property (nonatomic, strong) NSURL *location;
 @end
 
 @implementation MusicListViewController
+- (NSMutableArray *)cellArr{
+    if (!_cellArr) {
+        _cellArr = [NSMutableArray new];
+    }
+    return _cellArr;
+}
+
 - (MusicViewModel *)musicVM{
     if (!_musicVM) {
         _musicVM=[[MusicViewModel alloc] initWithAlbumId:_albumId];
     }
     return _musicVM;
 }
+
+- (NSString *)songPlistPath {
+    if (!_songPlistPath) {
+        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+        _songPlistPath = [path stringByAppendingPathComponent:@"song.plist"];
+        NSLog(@"初次创建song plist");
+    }
+    return _songPlistPath;
+}
+
 - (UITableView *)tableView{
     if (!_tableView) {
         _tableView=[[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -76,48 +98,80 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveProgress:) name:@"test" object:nil];
-    
-    
-    // Do any additional setup after loading the view.
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"music_bg"]];
+    self.tableView.backgroundView.alpha = 0.6;
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveProgress:) name:MusicListViewController_download object:nil];
     [Factory addBackItemToVC:self];
     [self.tableView.mj_header beginRefreshing];
-    //添加播放控制视图
-    [self.view addSubview:[PlayView sharedInstance]];
-    [[PlayView sharedInstance] mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(0);
-        make.bottom.mas_equalTo(-40);
-        make.size.mas_equalTo(CGSizeMake(80, 80));
+    [self.view addSubview:[SmallPlayView sharedInstance]];
+    [[SmallPlayView sharedInstance] mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(-80);
+        make.left.mas_equalTo(20);
+        make.width.height.mas_equalTo(30);
     }];
+    [[SmallPlayView sharedInstance].playViewBtn bk_addEventHandler:^(id sender) {
+        PlayViewController *vc = [PlayViewController new];
+        [self presentViewController:vc animated:YES completion:nil];
+    } forControlEvents:UIControlEventTouchUpInside];
 }
 
-
-- (void)receiveProgress:(NSNotification *)notification{
-    NSDictionary *dic = notification.userInfo;
-    NSString *progressStr = dic[@"progress"];
-    NSLog(@"notice:%f",progressStr.floatValue);
+- (void)receiveProgress:(NSInteger)index{
+//    NSDictionary *dic = notification.userInfo;
+//    NSString *progressStr = dic[@"progress"];
+//    NSLog(@"notice:%f",progressStr.floatValue);
     NSLog(@"完成下载啦");
-    [self.cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloaded"] forState:UIControlStateSelected|UIControlStateNormal];
+    
+    for (int i = 0; i < self.cellArr.count; i ++) {
+        MusicDetailCell *cell = self.cellArr[i];
+        if (cell.tag == index) {
+            cell.downloadBtn.selected = NO;
+            cell.downloadBtn.enabled = NO;
+            [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloaded"] forState:UIControlStateDisabled];
+            //加入plist
+            //图像
+            //NSData *imgData = UIImagePNGRepresentation(self.cell.imageView.image);
+            //下载时间
+            NSMutableArray *array = [NSMutableArray arrayWithContentsOfFile:self.songPlistPath];
+            NSDictionary *dic = @{@"song":cell.titleLb.text,@"duration":cell.durationLb.text,@"singer":cell.sourceLb.text,@"album":self.navigationItem.title,@"time":[self dateForStandardYMdHmsS]};
+            [array addObject:dic];
+            [array writeToFile:self.songPlistPath atomically:YES];
+            
+            [self.cellArr removeObject:cell];
+        }
+    }
 }
 
 #pragma mark - UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.musicVM.rowNumber;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     MusicDetailCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell == nil) {
         cell = [[MusicDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+        cell.delegate = self;
     }
     [cell.coverIV.imageView sd_setImageWithURL:[self.musicVM coverURLForRow:indexPath.row] placeholderImage:[UIImage imageNamed:@"cell_bg_noData_1"]];
-    cell.titleLb.text=[self.musicVM titleForRow:indexPath.row];
+    cell.titleLb.text = [self.musicVM titleForRow:indexPath.row];
     cell.timeLb.text = [self.musicVM timeForRow:indexPath.row];
-    cell.sourceLb.text=[self.musicVM sourceForRow:indexPath.row];
-    cell.playCountLb.text=[self.musicVM playCountForRow:indexPath.row];
-    cell.favorCountLb.text=[self.musicVM favorCountForRow:indexPath.row];
-    cell.commentCountLb.text=[self.musicVM commentCountForRow:indexPath.row];
+    cell.sourceLb.text = [self.musicVM sourceForRow:indexPath.row];
+    cell.playCountLb.text = [self.musicVM playCountForRow:indexPath.row];
     cell.durationLb.text = [self.musicVM durationForRow:indexPath.row];
+    cell.backgroundColor = [UIColor clearColor];
+    
+    NSMutableArray *mArr = [NSMutableArray arrayWithContentsOfFile:self.songPlistPath];
+    for (int i = 0; i < mArr.count; i ++) {
+        NSMutableDictionary *mDic = mArr[i];
+        //假设歌名不重复
+        NSString *title = mDic[@"song"];
+        if ([title isEqualToString:[self.musicVM titleForRow:indexPath.row]]) {//已经下载过了
+//            cell.downloadBtn.selected = YES;
+            cell.downloadBtn.enabled = NO;
+            [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloaded"] forState:UIControlStateDisabled];
+            
+        }
+    }
     
     [cell.downloadBtn bk_addEventHandler:^(id sender) {
         if(cell.startOrFinish == -1){
@@ -126,6 +180,9 @@
             NSLog(@"下载按钮%ld被点击...",indexPath.row);
             [cell downLoadMusicURL:[self.musicVM musicURLForRow:indexPath.row]];
             [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloading"] forState:UIControlStateSelected];
+            self.cell = cell;
+            cell.tag = indexPath.row + 100;
+            [self.cellArr addObject:cell];
         }else if(cell.startOrFinish == 0){
             if(cell.downloadBtn.selected == YES){
                 cell.downloadBtn.selected = NO;
@@ -137,17 +194,25 @@
                 [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloading"] forState:UIControlStateSelected];
             }
         }
-        self.cell = cell;
     } forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"%@",[self.musicVM musicURLForRow:indexPath.row]);
+    PlayViewController *vc = [[PlayViewController alloc] init];
+    [self presentViewController:vc animated:YES completion:nil];
     [[PlayView sharedInstance] playWithURL:[self.musicVM musicURLForRow:indexPath.row]];
 }
+
 //允许自动布局
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return UITableViewAutomaticDimension;
 }
 
+#pragma mark - MusicDetailCellDelegate
+- (void)tellmeProgress:(CGFloat)progress withCellTag:(NSInteger)tag{
+    if (progress >= 1) {
+        [self receiveProgress:tag];
+    }
+}
 @end

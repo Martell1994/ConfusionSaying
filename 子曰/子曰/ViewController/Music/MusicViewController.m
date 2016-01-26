@@ -54,7 +54,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"音乐";
+    self.navigationItem.title = @"丝竹榜单";
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"music_bg"]];
+    self.tableView.backgroundView.alpha = 0.6;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [self.musicCategoryVM refreshDataCompletionHandle:^(NSError *error) {
             if (error) {
@@ -94,14 +96,16 @@
     cell.titleLb.text = [self.musicCategoryVM titleForRow:indexPath.row];
     cell.descLb.text = [self.musicCategoryVM descForRow:indexPath.row];
     cell.numberLb.text = [self.musicCategoryVM numberForRow:indexPath.row];
-    [cell.iconIV.imageView sd_setImageWithURL:[self.musicCategoryVM iconURLForRow:indexPath.row] placeholderImage:[UIImage imageNamed:@"cell_bg_noData_1"]];
+    [cell.iconIV.imageView sd_setImageWithURL:[self.musicCategoryVM iconURLForRow:indexPath.row] placeholderImage:[UIImage imageNamed:@"cell_bg_noData"]];
     cell.orderLb.text = @(indexPath.row + 1).stringValue;
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     MusicListViewController *vc = [[MusicListViewController alloc]initWithAlbumId:[self.musicCategoryVM albumIdForRow:indexPath.row]];
+    vc.navigationItem.title = [self.musicCategoryVM titleForRow:indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

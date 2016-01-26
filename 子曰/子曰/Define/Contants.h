@@ -14,6 +14,7 @@
 #define RegisterViewController_codeCorrect @"RegisterViewController_codeCorrect"
 #define MyReferenceViewController_save @"MyReferenceViewController_save"
 #define MainViewController_city @"MainViewController_city"
+#define MusicListViewController_download @"MusicListViewController_download"
 
 //plistPath的懒加载方法
 #define plistPath_lazy - (NSString *)plistPath { \

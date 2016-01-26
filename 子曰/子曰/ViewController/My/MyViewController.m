@@ -8,6 +8,7 @@
 
 #import "MyViewController.h"
 #import "MyReferenceViewController.h"
+#import "DownloadedViewController.h"
 #import "AboutViewController.h"
 #import "MyHeaderCell.h"
 #import "Masonry.h"
@@ -21,6 +22,7 @@
 
 getPlistDic
 
+
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -33,7 +35,10 @@ getPlistDic
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     NSIndexPath *indexPath=[NSIndexPath indexPathForRow:0 inSection:0];
+    NSIndexPath *songIndexPath = [NSIndexPath indexPathForRow:0 inSection:1];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[songIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void)viewDidLoad {
@@ -69,8 +74,11 @@ getPlistDic
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"下载的歌曲";
-            cell.detailTextLabel.text = @"10首";
+            cell.textLabel.text = @"下载的音乐";
+            NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+            path = [path stringByAppendingPathComponent:@"song.plist"];
+            NSArray *arr = [NSArray arrayWithContentsOfFile:path];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%ld首",arr.count];
             cell.detailTextLabel.textColor = [UIColor lightGrayColor];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return cell;
@@ -100,14 +108,24 @@ getPlistDic
         }];
         [logout setTitle:@"退出登录" forState:UIControlStateNormal];
         [logout setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+        [logout addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
+}
+
+//退出登录方法
+- (void)logout {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         MyReferenceViewController *vc = [[MyReferenceViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        DownloadedViewController *vc = [[DownloadedViewController alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     if (indexPath.section == 2) {

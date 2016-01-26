@@ -76,7 +76,7 @@
 }
 
 - (NSString *)sourceForRow:(NSInteger)row {
-    return [NSString stringWithFormat:@"by %@",[self modelForRow:row].nickname];
+    return [self modelForRow:row].nickname;
 }
 
 - (NSString *)playCountForRow:(NSInteger)row {

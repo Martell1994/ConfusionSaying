@@ -14,4 +14,5 @@
 - (void)playWithURL:(NSURL *)musicURL;
 @property (nonatomic, strong) AVPlayer *player;
 @property (nonatomic, strong) UIButton *playBtn;
+@property (nonatomic, strong) UIButton *backBtn;
 @end

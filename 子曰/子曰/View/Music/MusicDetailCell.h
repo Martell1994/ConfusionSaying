@@ -10,7 +10,10 @@
 #import "MImageView.h"
 #import "DownloadMusicNetManager.h"
 
-@interface MusicDetailCell : UITableViewCell
+@protocol MusicDetailCellDelegate <NSObject>
+- (void)tellmeProgress:(CGFloat)progress withCellTag:(NSInteger)tag;
+@end
+@interface MusicDetailCell : UITableViewCell <DownloadMusicNetManagerDelegate>
 /** 音乐封面图 */
 @property (nonatomic, strong) MImageView *coverIV;
 /** 题目标签 */
@@ -36,4 +39,7 @@
 - (void)downloadPause;
 - (void)downloadResume;
 @property (nonatomic,assign) NSInteger startOrFinish;
+
+
+@property (nonatomic, assign) id<MusicDetailCellDelegate> delegate;
 @end

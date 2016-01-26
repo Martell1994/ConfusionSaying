@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *pwdTF;
 @property (weak, nonatomic) IBOutlet UIButton *loginBtn;
 @property (weak, nonatomic) IBOutlet UIButton *registerBtn;
-@property (nonatomic, strong) NSString *plistPath;
+@property (nonatomic, strong) NSString *userPlistPath;
 @property (weak, nonatomic) IBOutlet UILabel *versionLB;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @end
@@ -25,13 +25,14 @@
 initHUDView
 errorHUD
 
-- (NSString *)plistPath {
-    if (!_plistPath) {
+- (NSString *)userPlistPath {
+    if (!_userPlistPath) {
         NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-        _plistPath = [path stringByAppendingPathComponent:@"user.plist"];
+        _userPlistPath = [path stringByAppendingPathComponent:@"user.plist"];
     }
-    return _plistPath;
+    return _userPlistPath;
 }
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -50,8 +51,8 @@ errorHUD
 
 //初始化登录信息
 - (void)initData {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.plistPath]) {
-        NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:self.plistPath];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.userPlistPath]) {
+        NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:self.userPlistPath];
         _nameTF.text = [dic objectForKey:@"phone"];
         _pwdTF.text = [dic objectForKey:@"pwd"];
     }
@@ -111,12 +112,12 @@ errorHUD
     //用户名
     NSString *userName = [obj objectForKey:@"userName"];
     //用户性别
-    NSString *sex = [obj objectForKey:@"userSex"];
+    NSString *gender = [obj objectForKey:@"userGender"];
     //头像
     NSString *headImage = [obj objectForKey:@"userImg"];
-    sex = (sex == nil) ? @"未设置" : sex;
-    NSDictionary *dic = @{@"id":userId, @"userName":userName, @"phone":_nameTF.text, @"pwd":_pwdTF.text, @"createdTime":[dateFormatter stringFromDate:createdData], @"headerImage":headImage, @"sex":sex, @"city":@"未定位"};
-    [dic writeToFile:self.plistPath atomically:YES];
+    gender = (gender == nil) ? @"未设置" : gender;
+    NSDictionary *dic = @{@"id":userId, @"name":userName, @"phone":_nameTF.text, @"pwd":_pwdTF.text, @"createdTime":[dateFormatter stringFromDate:createdData], @"headerImage":headImage, @"gender":gender, @"city":@"未定位"};
+    [dic writeToFile:self.userPlistPath atomically:YES];
 }
 
 @end

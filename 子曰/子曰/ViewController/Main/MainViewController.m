@@ -40,8 +40,9 @@ getPlistDic
         [self startLocationServices];
         self.cityLabel.text = @"定位中";
     }
-    [self refreshWeatherInfo:@"杭州市"];//
-    
+    [self refreshWeatherInfo:@"杭州市"];
+    //改变tarBar选中时的默认颜色
+    self.tabBarController.tabBar.tintColor = kRGBColor(110, 153, 106);
 }
 
 //开启定位服务
