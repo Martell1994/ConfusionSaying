@@ -19,12 +19,14 @@
         NSLog(@"Reachability: %@", AFStringFromNetworkReachabilityStatus(status));
         switch (status) {
             case AFNetworkReachabilityStatusReachableViaWWAN:
+                self.onLine = 1;
+                break;
             case AFNetworkReachabilityStatusReachableViaWiFi:
-                self.onLine = YES;
+                self.onLine = 2;
                 break;
             case AFNetworkReachabilityStatusNotReachable:
             default:
-                self.onLine = NO;
+                self.onLine = 0;
                 break;
         }
     }];

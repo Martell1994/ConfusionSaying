@@ -34,7 +34,7 @@ static AFHTTPSessionManager *manager = nil;
         }
     }
     //把字符串中的中文转为%号形势
-    return [percentPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [percentPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 + (id)GET:(NSString *)path parameters:(NSDictionary *)params completionHandler:(void(^)(id responseObj, NSError *error))complete{

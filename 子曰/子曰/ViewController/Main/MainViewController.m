@@ -8,9 +8,11 @@
 
 #import "MainViewController.h"
 #import "WeatherViewModel.h"
+#import "ZhiHuCategoryViewModel.h"
+#import "ZhiHuCateDetailViewController.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface MainViewController ()<CLLocationManagerDelegate>
+@interface MainViewController ()<CLLocationManagerDelegate,UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *cityLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tempLabel;
 @property (weak, nonatomic) IBOutlet UILabel *weatherLabel;
@@ -18,6 +20,8 @@
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSString *plistPath;
 @property (nonatomic,strong) WeatherViewModel *weatherVM;
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) ZhiHuCategoryViewModel *zhCateVM;
 @end
 
 @implementation MainViewController
@@ -32,6 +36,26 @@ getPlistDic
     return _weatherVM;
 }
 
+- (UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc]init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        [self.view addSubview:_tableView];
+        [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(180);
+            make.left.right.mas_equalTo(0);
+            make.height.mas_equalTo(kWindowH - 230);
+        }];
+    }
+    return _tableView;
+}
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:1],NSForegroundColorAttributeName:[UIColor blackColor]}];
+    self.tabBarController.tabBar.hidden = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"今日精选";
@@ -41,8 +65,18 @@ getPlistDic
         self.cityLabel.text = @"定位中";
     }
     [self refreshWeatherInfo:@"杭州市"];
-    //改变tarBar选中时的默认颜色
-    self.tabBarController.tabBar.tintColor = kRGBColor(110, 153, 106);
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.zhCateVM refreshDataCompleteHandle:^(NSError *error) {
+            if (error) {
+                [self showErrorMsg:error.localizedDescription];
+            }else{
+                [self.tableView reloadData];
+                [self.tableView.mj_footer resetNoMoreData];
+            }
+            [self.tableView.mj_header endRefreshing];
+        }];
+    }];
+    [self.tableView.mj_header beginRefreshing];
 }
 
 //开启定位服务
@@ -60,7 +94,6 @@ getPlistDic
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
     [_locationManager stopUpdatingLocation];
     CLLocation *currentLocation = [locations lastObject];
-    //NSLog(@"%@",[NSString stringWithFormat:@"经度:%3.5f\n纬度:%3.5f",currentLocation.coordinate.latitude, currentLocation.coordinate.longitude]);
     CLGeocoder *geoCoder = [[CLGeocoder alloc] init];
     [geoCoder reverseGeocodeLocation:currentLocation completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         NSMutableDictionary *info = [[[NSMutableDictionary alloc] initWithContentsOfFile:_plistPath] mutableCopy];
@@ -101,5 +134,33 @@ getPlistDic
 {
     [super viewWillDisappear:animated];
     [_locationManager stopUpdatingLocation];
+}
+
+- (ZhiHuCategoryViewModel *)zhCateVM{
+    if (!_zhCateVM) {
+        _zhCateVM = [[ZhiHuCategoryViewModel alloc]init];
+    }
+    return _zhCateVM;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.zhCateVM.rowNum;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ZhiHuCateCell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ZhiHuCateCell"];
+    }
+    cell.textLabel.text = [self.zhCateVM nameForRow:indexPath.row];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
+    ZhiHuCateDetailViewController *zhVC = [[ZhiHuCateDetailViewController alloc]initWithcateId:[self.zhCateVM cateIdForRow:indexPath.row]];
+    [self.navigationController pushViewController:zhVC animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 @end

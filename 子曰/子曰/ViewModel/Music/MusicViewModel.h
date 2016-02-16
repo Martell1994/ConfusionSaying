@@ -23,6 +23,7 @@
 @property (nonatomic, getter=isHasMore) BOOL hasMore;
 /** 获取某行的封面图片URL */
 - (NSURL *)coverURLForRow:(NSInteger)row;
+- (NSString *)largeCoverURLForRow:(NSInteger)row;
 /** 获取某行题目 */
 - (NSString *)titleForRow:(NSInteger)row;
 /** 获取某行更新时间 */
@@ -40,6 +41,6 @@
 /** 获取某行下载链接地址 */
 - (NSURL *)downLoadURLForRow:(NSInteger)row;
 /** 获取某行音频播放地址 */
-- (NSURL *)musicURLForRow:(NSInteger)row;
+- (NSString *)musicURLForRow:(NSInteger)row;
 
 @end

@@ -10,6 +10,10 @@
 
 @protocol DownloadMusicNetManagerDelegate <NSObject>
 - (void)tellyouProgress:(CGFloat)progress;
+/** 
+ * 0为MP3，1为PNG
+ */
+//- (void)tellyouLocation:(NSURL *)location type:(NSInteger)type;
 - (void)tellyouLocation:(NSURL *)location;
 @end
 @interface DownloadMusicNetManager : NSObject<NSURLSessionDownloadDelegate>

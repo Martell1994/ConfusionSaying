@@ -11,3 +11,4 @@
 @interface MImageView : UIView
 @property (nonatomic, strong) UIImageView *imageView;
 @end
+

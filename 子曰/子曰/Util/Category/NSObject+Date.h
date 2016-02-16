@@ -17,4 +17,8 @@
  * 以YYYYMMddHHmmssSS的形式返回当前时间
  */
 - (NSString *)dateForYMdHmsS;
+/**
+ * 以YY/MM/dd的形式返回当前时间
+ */
+- (NSString *)dateForYYMMddWithDate:(NSDate *)date;
 @end

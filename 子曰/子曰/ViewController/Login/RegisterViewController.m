@@ -149,7 +149,6 @@ successHUD
             [self dismissViewControllerAnimated:YES completion:nil];
         } else {
             [self showErrorHUD:@"注册失败!请检查网络"];
-            //[JCAlertView showOneButtonWithTitle:@"注册失败" Message:@"服务器出神了,请检查网络" ButtonType:JCAlertViewButtonTypeDefault ButtonTitle:@"遵 命" Click:nil];
         }
     }];
 }

@@ -32,9 +32,13 @@
 @property (nonatomic, strong) UILabel *durationLb;
 /** 下载按钮 */
 @property (nonatomic, strong) UIButton *downloadBtn;
+/** 专辑名 */
+@property (nonatomic, strong) NSString *album;
 
 /** 下载某行音频 */
 - (void)downLoadMusicURL:(NSURL *)url;
+/** 开始下载某行音频图片 */
+//- (void)downLoadMusicImage:(NSURL *)url;
 @property (nonatomic,strong) DownloadMusicNetManager *dlmNetManager;
 - (void)downloadPause;
 - (void)downloadResume;

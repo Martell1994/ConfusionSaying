@@ -59,6 +59,10 @@
     return [NSURL URLWithString:[self modelForRow:row].coverSmall];
 }
 
+- (NSString *)largeCoverURLForRow:(NSInteger)row {
+    return [self modelForRow:row].coverLarge;
+}
+
 - (NSString *)titleForRow:(NSInteger)row {
     return [self modelForRow:row].title;
 }
@@ -107,8 +111,8 @@
     return [NSURL URLWithString:[self modelForRow:row].downloadUrl];
 }
 
-- (NSURL *)musicURLForRow:(NSInteger)row {
-    return [NSURL URLWithString:[self modelForRow:row].playUrl64];
+- (NSString *)musicURLForRow:(NSInteger)row {
+    return [self modelForRow:row].playUrl64;
 }
 
 @end

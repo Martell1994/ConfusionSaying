@@ -56,7 +56,7 @@
             make.right.mas_equalTo(-10);
             make.width.mas_equalTo(55);
         }];
-        _timeLb.textAlignment=NSTextAlignmentRight;
+        _timeLb.textAlignment = NSTextAlignmentRight;
     }
     return _timeLb;
 }
@@ -132,6 +132,7 @@
     }
     return _downloadBtn;
 }
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self=[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         //为了触发下载按钮的懒加载
@@ -161,6 +162,13 @@
     [self.dlmNetManager methodDownloadURL:url];
 }
 
+/** 开始下载某行音频图片 */
+- (void)downLoadMusicImage:(NSURL *)url{
+    //    self.downloadBtn.enabled = NO;
+    [self.dlmNetManager methodDownloadURL:url];
+}
+
+
 /** 暂停下载 */
 - (void)downloadPause{
     [self.dlmNetManager pauseDownload];
@@ -181,19 +189,26 @@
 }
 
 - (void)tellyouProgress:(CGFloat)progress{
-//    NSLog(@"tell:%f",progress);
     [self.delegate tellmeProgress:progress withCellTag:self.tag];
 }
+
 - (void)tellyouLocation:(NSURL *)location{
-    //以MP3格式保存
-    NSString *savaFileName = [self.titleLb.text stringByAppendingPathExtension:@"mp3"];
+    //音乐以MP3格式保存
+    NSString *MP3savaFileName = [[[self.titleLb.text stringByAppendingString:@"-"] stringByAppendingString:self.album] stringByAppendingPathExtension:@"mp3"];
     NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *rootPath = [docPath stringByAppendingPathComponent:@"Music"];
-    BOOL isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
-    if (isSuccess) {
-        NSString *filePath = [rootPath stringByAppendingPathComponent:savaFileName];
+    NSString *MP3rootPath = [docPath stringByAppendingPathComponent:@"Music"];
+    BOOL MP3isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:MP3rootPath withIntermediateDirectories:YES attributes:nil error:nil];
+    if (MP3isSuccess) {
+        NSString *filePath = [MP3rootPath stringByAppendingPathComponent:MP3savaFileName];
         [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:filePath error:nil];
-        NSLog(@"filePath %@", filePath);
     }
+//    //图片以png格式保存
+//    NSString *PNGsaveFileName = [self.titleLb.text stringByAppendingPathExtension:@"png"];
+//    NSString *PNGrootPath = [docPath stringByAppendingPathComponent:@"Image"];
+//    BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:PNGrootPath withIntermediateDirectories:YES attributes:nil error:nil];
+//    if (PNGisSuccess) {
+//        NSString *filePath = [PNGrootPath stringByAppendingPathComponent:PNGsaveFileName];
+//        [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:filePath error:nil];
+//    }
 }
 @end

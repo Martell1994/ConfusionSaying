@@ -1,4 +1,3 @@
-
 //
 //  NSObject+Date.m
 //  子曰
@@ -23,6 +22,14 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"YYYYMMddHHmmssSS"];
     NSString *timeFormatter = [dateFormatter stringFromDate:currentTime];
+    return timeFormatter;
+}
+
+- (NSString *)dateForYYMMddWithDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy/MM/dd"];
+    NSString *timeFormatter = [dateFormatter stringFromDate:date];
+    timeFormatter = [timeFormatter substringFromIndex:2];
     return timeFormatter;
 }
 @end

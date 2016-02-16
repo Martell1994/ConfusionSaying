@@ -9,28 +9,26 @@
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
-@property (nonatomic, strong) NSString *songPlistPath;
+@property (nonatomic, strong) NSString *songDownloadPlistPath;
 @end
 
 @implementation AppDelegate
 
-- (NSString *)songPlistPath {
-    if (!_songPlistPath) {
-        NSString *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-        _songPlistPath = [path stringByAppendingPathComponent:@"song.plist"];
+- (NSString *)songDownloadPlistPath {
+    if (!_songDownloadPlistPath) {
+        _songDownloadPlistPath = [DirectoriesPath stringByAppendingPathComponent:@"songDownload.plist"];
     }
-    return _songPlistPath;
+    return _songDownloadPlistPath;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window.tintColor = dColor;//修改整个应用程序的风格颜色
     [SMSSDK registerApp:smsKey withSecret:smsSecret];
     [Bmob registerWithAppKey:bmobKey];
     NSArray *arr = [NSArray new];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:self.songPlistPath]) {
-        [arr writeToFile:self.songPlistPath atomically:YES];
+    if (![fileManager fileExistsAtPath:self.songDownloadPlistPath]) {
+        [arr writeToFile:self.songDownloadPlistPath atomically:YES];
     }
-    
     return YES;
 }
 

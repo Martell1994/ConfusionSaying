@@ -29,9 +29,22 @@
     [progressHUD hide:YES afterDelay:kToastDuration];
 }
 
+- (void)showMsg:(NSObject *)msg OnView:(UIView *)view {
+    [self hideProgress];
+    MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    progressHUD.mode = MBProgressHUDModeText;
+    progressHUD.labelText = msg.description;
+    [progressHUD hide:YES afterDelay:kToastDuration];
+}
+
 //显示忙
 - (void)showProgress{
     MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:[self currentView] animated:YES];
+    [progressHUD hide:YES afterDelay:kToastDuration];
+}
+
+- (void)showProgressOn:(UIView *)view {
+    MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
     [progressHUD hide:YES afterDelay:kToastDuration];
 }
 
@@ -42,7 +55,6 @@
 
 - (UIView *)currentView{
     UIViewController *controller = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    
     if ([controller isKindOfClass:[UITabBarController class]]) {
         controller = [(UITabBarController *)controller selectedViewController];
     }

@@ -10,6 +10,7 @@
 #import "MusicCategoryCell.h"
 #import "MusicCategoryViewModel.h"
 #import "MusicListViewController.h"
+#import "PlayViewController.h"
 
 @interface MusicViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -34,27 +35,18 @@
         [self.view addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(NaviHeight);
-            make.left.mas_equalTo(0);
-            make.right.mas_equalTo(0);
-            make.bottom.mas_equalTo(0);
+            make.left.right.bottom.mas_equalTo(0);
         }];
     }
     return _tableView;
 }
 
-+ (UINavigationController *)defaultNavi {
-    static UINavigationController *navi = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        MusicViewController *vc = [MusicViewController new];
-        navi = [[UINavigationController alloc] initWithRootViewController:vc];
-    });
-    return navi;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"丝竹榜单";
+    UIBarButtonItem *playViewBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"album_tracks"] style:UIBarButtonItemStylePlain target:self action:@selector(showPlayView)];
+    playViewBarButtonItem.tintColor = [UIColor blackColor];
+    self.navigationItem.rightBarButtonItem = playViewBarButtonItem;
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"music_bg"]];
     self.tableView.backgroundView.alpha = 0.6;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -104,13 +96,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.hidesBottomBarWhenPushed = YES;
     MusicListViewController *vc = [[MusicListViewController alloc]initWithAlbumId:[self.musicCategoryVM albumIdForRow:indexPath.row]];
     vc.navigationItem.title = [self.musicCategoryVM titleForRow:indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 170 / 2;
+}
+
+- (void)showPlayView {
+    PlayViewController *vc = [PlayViewController new];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 @end

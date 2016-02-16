@@ -21,12 +21,17 @@
 #import <BlocksKit+UIKit.h>
 #import <MBProgressHUD.h>
 #import <AVFoundation/AVFoundation.h>
-#import "UIImageView+WebCache.h"
-#import "NSObject+Common.h"
 #import "MobClickSocialAnalytics.h"
 #import "MobClick.h"
 #import "Contants.h"
 #import "Factory.h"
+#import "AppDelegate.h"
+#import "MImageView.h"
+
+//扩展
+#import "UIImageView+WebCache.h"
+#import "NSObject+Common.h"
+#import "UIView+Rotation.h"
 #import "NSObject+Date.h"
 
 #define AppKey @"5632e64ee0f55a7d7800760b"
