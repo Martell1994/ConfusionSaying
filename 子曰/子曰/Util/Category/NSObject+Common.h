@@ -14,7 +14,7 @@
 
 //显示成功提示
 - (void)showSuccessMsg:(NSObject *)msg;
-- (void)showMsg:(NSObject *)msg OnView:(UIView *)view;
+- (void)showMsg:(NSObject *)msg;
 
 //显示忙
 - (void)showProgress;
@@ -22,4 +22,5 @@
 
 //隐藏提示
 - (void)hideProgress;
+- (void)hideProgressOn:(UIView *)view;
 @end

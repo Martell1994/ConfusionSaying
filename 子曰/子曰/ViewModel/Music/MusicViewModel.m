@@ -102,9 +102,7 @@
 
 - (NSString *)durationForRow:(NSInteger)row {
     NSInteger duration = [self modelForRow:row].duration;
-    NSInteger minute = duration / 60;
-    NSInteger second = duration % 60;
-    return [NSString stringWithFormat:@"%02ld:%02ld",minute, second];
+    return [NSString stringWithFormat:@"%02ld:%02ld",duration / 60, duration % 60];
 }
 
 - (NSURL *)downLoadURLForRow:(NSInteger)row {

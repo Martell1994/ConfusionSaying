@@ -49,7 +49,6 @@
             make.size.mas_equalTo(CGSizeMake(kWindowW - 90, 30));
             make.top.mas_equalTo(30);
         }];
-        
     }
     [_songSV setValue:songName forKeyPath:@"titleLb.text"];
     [_songSV recal:songName];
@@ -92,28 +91,29 @@
         _favorBtn = [UIButton new];
         [self addSubview:_favorBtn];
         [_favorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(32);
-            make.right.mas_equalTo(-10);
-            make.size.mas_equalTo(CGSizeMake(20, 20));
+            make.top.mas_equalTo(self.downloadBtn.mas_top);
+            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
+            make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
         [_favorBtn setBackgroundImage:[UIImage imageNamed:@"icon_like"] forState:UIControlStateNormal];
     }
     return _favorBtn;
 }
 
--(UIProgressView *)songProgress {
-    if (!_songProgress) {
-        _songProgress = [UIProgressView new];
-        [self addSubview:_songProgress];
-        [_songProgress mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(20);
-            make.right.mas_equalTo(-20);
+- (UISlider *)songSlider{
+    if (!_songSlider) {
+        _songSlider = [UISlider new];
+        [self addSubview:_songSlider];
+        [_songSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(self.currentTimeLb.mas_right).mas_equalTo(2);
+            make.right.mas_equalTo(self.totalTimeLb.mas_left).mas_equalTo(-2);
             make.top.mas_equalTo(self.albumCoverMaskImgV.mas_bottom).mas_equalTo(30);
             make.height.mas_equalTo(3);
         }];
-        _songProgress.tintColor = [UIColor whiteColor];
+        _songSlider.tintColor = [UIColor whiteColor];
+        [_songSlider setThumbImage:[UIImage imageNamed:@"thumb"] forState:UIControlStateNormal];
     }
-    return _songProgress;
+    return _songSlider;
 }
 
 - (UILabel *)currentTimeLb {
@@ -121,9 +121,9 @@
         _currentTimeLb = [UILabel new];
         [self addSubview:_currentTimeLb];
         [_currentTimeLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.mas_equalTo(self.songProgress.mas_left);
-            make.size.mas_equalTo(CGSizeMake(50, 20));
-            make.top.mas_equalTo(self.songProgress.mas_bottom).mas_equalTo(3);
+            make.left.mas_equalTo(13);
+            make.size.mas_equalTo(CGSizeMake(42, 20));
+            make.top.mas_equalTo(self.albumCoverMaskImgV.mas_bottom).mas_equalTo(22);
         }];
         _currentTimeLb.textColor = [UIColor whiteColor];
         _currentTimeLb.text = @"00:00";
@@ -137,9 +137,9 @@
         _totalTimeLb = [UILabel new];
         [self addSubview:_totalTimeLb];
         [_totalTimeLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(self.songProgress.mas_right);
-            make.size.mas_equalTo(CGSizeMake(50, 20));
-            make.top.mas_equalTo(self.songProgress.mas_bottom).mas_equalTo(3);
+            make.right.mas_equalTo(-13);
+            make.size.mas_equalTo(CGSizeMake(42, 20));
+            make.top.mas_equalTo(self.albumCoverMaskImgV.mas_bottom).mas_equalTo(22);
         }];
         _totalTimeLb.textAlignment = NSTextAlignmentRight;
         _totalTimeLb.textColor = [UIColor whiteColor];
@@ -153,26 +153,26 @@
         _downloadBtn = [UIButton new];
         [self addSubview:_downloadBtn];
         [_downloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.currentTimeLb.mas_bottom).mas_equalTo(10);
-            make.left.mas_equalTo(self.currentTimeLb.mas_left);
+            make.top.mas_equalTo(self.currentTimeLb.mas_bottom).mas_equalTo(20);
+            make.left.mas_equalTo((kWindowW - 100) / 8);
             make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
     }
     return _downloadBtn;
 }
 
-- (UIButton *)shareBtn {
-    if (!_shareBtn) {
-        _shareBtn = [UIButton new];
-        [self addSubview:_shareBtn];
-        [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.downloadBtn.mas_top);
-            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 140) / 3);
-            make.size.mas_equalTo(CGSizeMake(25, 25));
-        }];
-    }
-    return _shareBtn;
-}
+//- (UIButton *)shareBtn {
+//    if (!_shareBtn) {
+//        _shareBtn = [UIButton new];
+//        [self addSubview:_shareBtn];
+//        [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.top.mas_equalTo(self.downloadBtn.mas_top);
+//            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
+//            make.size.mas_equalTo(CGSizeMake(25, 25));
+//        }];
+//    }
+//    return _shareBtn;
+//}
 
 - (UIButton *)modeBtn {
     if (!_modeBtn) {
@@ -180,7 +180,7 @@
         [self addSubview:_modeBtn];
         [_modeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.downloadBtn.mas_top);
-            make.left.mas_equalTo(self.shareBtn.mas_right).mas_equalTo((kWindowW - 140) / 3);
+            make.left.mas_equalTo(self.favorBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
             make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
         [_modeBtn setBackgroundImage:[UIImage imageNamed:@"icon_shuffleCycle"] forState:UIControlStateNormal];
@@ -194,12 +194,28 @@
         [self addSubview:_listBtn];
         [_listBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.downloadBtn.mas_top);
-            make.left.mas_equalTo(self.modeBtn.mas_right).mas_equalTo((kWindowW - 140) / 3);
+            make.left.mas_equalTo(self.modeBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
             make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
-        [_listBtn setBackgroundImage:[UIImage imageNamed:@"icon_list"] forState:UIControlStateNormal];
+        [_listBtn setBackgroundImage:[UIImage imageNamed:@"volume"] forState:UIControlStateNormal];
     }
     return _listBtn;
+}
+
+- (UISlider *)voiceSlider{
+    if (!_voiceSlider) {
+        _voiceSlider = [[UISlider alloc]init];
+        [self addSubview:_voiceSlider];
+        [_voiceSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(kWindowW / 2 - 130);
+            make.top.mas_equalTo(self.prevBtn.mas_bottom).mas_equalTo(10);
+            make.size.mas_equalTo(CGSizeMake(260, 3));
+        }];
+        _voiceSlider.tintColor = [UIColor whiteColor];
+        //        _voiceSlider.transform = CGAffineTransformMakeRotation(-M_PI_2);
+        [_voiceSlider setThumbImage:[UIImage imageNamed:@"thumb"] forState:UIControlStateNormal];
+    }
+    return _voiceSlider;
 }
 
 - (MImageView *)albumCoverImgV {
@@ -243,6 +259,7 @@
             make.size.mas_equalTo(CGSizeMake(80, 80));
         }];
         [_playBtn bk_addEventHandler:^(UIButton *sender) {
+            NSLog(@"playa");
             if (sender.selected) {
                 [self.albumCoverImgV stopRotation];
                 [_player pause];
@@ -289,6 +306,8 @@
     //激活
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     _player = [AVPlayer playerWithURL:musicURL];
+}
+- (void)setAlbumCoverImgVRotation{
     //动画令albumCoverImgV旋转
     CGRect endFrame = self.frame;
     CGRect startFrame = endFrame;
@@ -305,30 +324,35 @@
 
 //启动计时器
 - (void)startPlayingTimer {
-    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateTimer:) userInfo:nil repeats:YES];
+}
+
+//销毁计时器
+- (void)invalidatePlayingTimer{
+    [self.timer invalidate];
 }
 
 //计时器每秒调用的方法
 - (void)updateTimer:(NSTimer *)timer {
     NSTimeInterval duration = [self timeByInterval:self.totalTimeLb.text];
     NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentTime);
-    self.songProgress.progress = currentTime * 1.0 / duration;
+    self.songProgress = currentTime * 1.0 / duration;
+    self.songSlider.value = self.songProgress;
     self.currentTimeLb.text = [self stringByTime:currentTime];
     if ([self.currentTimeLb.text isEqualToString:self.totalTimeLb.text]) {
         [self.albumCoverImgV stopRotation];
+        self.playBtn.selected = NO;
+        self.currentTimeLb.text = @"00:00";
+        self.songSlider.value = 0;
+        self.isFinished = YES;
     }
 }
 
-//时间标签转换
-- (NSString *)stringByTime:(NSTimeInterval)time {
-    return [NSString stringWithFormat:@"%02d:%02d",(int)time / 60, (int)time % 60];
-}
-
-- (NSTimeInterval)timeByInterval:(NSString *)time {
-    NSArray *array = [time componentsSeparatedByString:@":"];
-    NSString *min = array[0];
-    NSString *sec = array[1];
-    return [min integerValue] * 60 + [sec integerValue];
+- (NSMutableArray *)playingList {
+    if (!_playingList) {
+        _playingList = [NSMutableArray new];
+    }
+    return _playingList;
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "MusicCategoryViewModel.h"
 #import "MusicListViewController.h"
 #import "PlayViewController.h"
+#import "PlayView.h"
 
 @interface MusicViewController ()<UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -43,10 +44,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.navigationItem.title = @"丝竹榜单";
-    UIBarButtonItem *playViewBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"album_tracks"] style:UIBarButtonItemStylePlain target:self action:@selector(showPlayView)];
-    playViewBarButtonItem.tintColor = [UIColor blackColor];
-    self.navigationItem.rightBarButtonItem = playViewBarButtonItem;
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"music_bg"]];
     self.tableView.backgroundView.alpha = 0.6;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -105,11 +104,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 170 / 2;
-}
-
-- (void)showPlayView {
-    PlayViewController *vc = [PlayViewController new];
-    [self presentViewController:vc animated:YES completion:nil];
 }
 
 @end

@@ -27,6 +27,10 @@
 #import "Factory.h"
 #import "AppDelegate.h"
 #import "MImageView.h"
+#import "PlayViewButton.h"
+
+//控制器
+#import "MainViewController.h"
 
 //扩展
 #import "UIImageView+WebCache.h"

@@ -216,7 +216,7 @@
         cell = [[NewsViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NewsCell"];
     }
     cell.backgroundColor = [UIColor clearColor];
-    [cell.imgIV sd_setImageWithURL:[NSURL URLWithString:[self.newsVM imgsrcForRow:indexPath.row]] placeholderImage:[UIImage imageNamed:@"newsCell_default"]];
+    [cell.imgIV sd_setImageWithURL:[NSURL URLWithString:[self.newsVM imgsrcForRow:indexPath.row]] placeholderImage:[UIImage imageNamed:@"NewsCell_default"]];
     cell.titleLb.text = [self.newsVM titleForRow:indexPath.row];
     cell.digestLb.text = [self.newsVM digestForRow:indexPath.row];
     return cell;

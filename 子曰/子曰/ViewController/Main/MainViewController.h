@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface MainViewController : UIViewController
-
+//悬浮播放器
+@property (nonatomic, strong) DraggableButton *playViewBtn;
 @end

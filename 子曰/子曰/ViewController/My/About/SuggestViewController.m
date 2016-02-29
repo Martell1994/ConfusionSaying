@@ -30,13 +30,13 @@
         BmobObject *suggest = [[BmobObject alloc] initWithClassName:@"ZY_Suggestion"];
         AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
         [suggest setObject:delegate.userId forKey:@"userId"];
-        [suggest setObject:textView.text forKey:@"content"];
+        [suggest setObject:textView.text forKey:@"sugContent"];
         [suggest saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
             if (isSuccessful) {
-                [self showMsg:@"发送成功" OnView:self.view];
+                [self showSuccessMsg:@"发送成功"];
                 textView.text = @"";
             } else {
-                [self showMsg:@"发送失败" OnView:self.view];
+                [self showErrorMsg:@"发送失败"];
             }
         }];
     }];

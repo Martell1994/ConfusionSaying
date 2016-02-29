@@ -24,7 +24,7 @@
         [self addSubview:self.titleLb];
         [self.titleLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.imgIV.mas_right).mas_equalTo(8);
-            make.top.mas_equalTo(self.imgIV.mas_top);
+            make.topMargin.mas_equalTo(self.imgIV.mas_topMargin).mas_equalTo(3);
         }];
         self.digestLb = [[UILabel alloc]init];
         self.digestLb.numberOfLines = 0;
@@ -33,8 +33,9 @@
         [self addSubview:self.digestLb];
         [self.digestLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.imgIV.mas_right).mas_equalTo(8);
-            make.top.mas_equalTo(self.titleLb.mas_bottom).mas_equalTo(8);
+            make.top.mas_equalTo(self.titleLb.mas_bottom).mas_equalTo(5);
             make.right.mas_equalTo(-16);
+            make.bottomMargin.mas_equalTo(self.imgIV.mas_bottomMargin).mas_equalTo(-3);
         }];
         
     }

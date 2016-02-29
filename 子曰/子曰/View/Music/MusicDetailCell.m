@@ -142,11 +142,10 @@
         view.backgroundColor=kRGBColor(243, 255, 254);
         self.selectedBackgroundView=view;
         //分割线距离左侧空间
-        self.separatorInset=UIEdgeInsetsMake(0, 76, 0, 0);
+        self.separatorInset = UIEdgeInsetsMake(0, 76, 0, 0);
     }
     return self;
 }
-
 
 - (DownloadMusicNetManager *)dlmNetManager{
     if(!_dlmNetManager){
@@ -167,7 +166,6 @@
     //    self.downloadBtn.enabled = NO;
     [self.dlmNetManager methodDownloadURL:url];
 }
-
 
 /** 暂停下载 */
 - (void)downloadPause{
@@ -195,20 +193,11 @@
 - (void)tellyouLocation:(NSURL *)location{
     //音乐以MP3格式保存
     NSString *MP3savaFileName = [[[self.titleLb.text stringByAppendingString:@"-"] stringByAppendingString:self.album] stringByAppendingPathExtension:@"mp3"];
-    NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *MP3rootPath = [docPath stringByAppendingPathComponent:@"Music"];
+    NSString *MP3rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Music"];
     BOOL MP3isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:MP3rootPath withIntermediateDirectories:YES attributes:nil error:nil];
     if (MP3isSuccess) {
         NSString *filePath = [MP3rootPath stringByAppendingPathComponent:MP3savaFileName];
         [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:filePath error:nil];
     }
-//    //图片以png格式保存
-//    NSString *PNGsaveFileName = [self.titleLb.text stringByAppendingPathExtension:@"png"];
-//    NSString *PNGrootPath = [docPath stringByAppendingPathComponent:@"Image"];
-//    BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:PNGrootPath withIntermediateDirectories:YES attributes:nil error:nil];
-//    if (PNGisSuccess) {
-//        NSString *filePath = [PNGrootPath stringByAppendingPathComponent:PNGsaveFileName];
-//        [[NSFileManager defaultManager] moveItemAtPath:location.path toPath:filePath error:nil];
-//    }
 }
 @end

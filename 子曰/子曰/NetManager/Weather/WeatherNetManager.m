@@ -8,7 +8,7 @@
 
 #import "WeatherNetManager.h"
 //key
-static NSString *const key = @"858904ce87e84142633f6e29d6a5181b";
+static NSString *const key = @"d2361c1db64dabb39158d6b9bdc3efae";
 @implementation WeatherNetManager
 + (id)getWeatherCity:(NSString *)cityName completionHandle:(void (^)(WeatherModel *, NSError *))completionHandle{
     cityName = [cityName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];

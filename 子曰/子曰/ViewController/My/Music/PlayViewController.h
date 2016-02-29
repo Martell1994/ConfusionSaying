@@ -8,14 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "MusicViewModel.h"
-enum musicListType {
-    networkMusicType,
-    downloadMusicType
-};
 
 @interface PlayViewController : UIViewController
-@property (nonatomic, assign) enum musicListType musicListType;
-@property (nonatomic, assign) NSInteger songId;
-@property (nonatomic, strong) MusicViewModel *musicVM;
-@property (nonatomic, strong) NSString *album;
+//@property (nonatomic, assign) NSInteger songId;
+//@property (nonatomic, strong) MusicViewModel *musicVM;
+@property (nonatomic, copy) NSString *album;
+@property (nonatomic, assign) BOOL favorType;
 @end

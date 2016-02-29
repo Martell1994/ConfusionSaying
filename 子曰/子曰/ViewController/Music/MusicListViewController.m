@@ -9,6 +9,7 @@
 #import "MusicListViewController.h"
 #import "PlayViewController.h"
 #import "MusicViewModel.h"
+#import "AlbumModel.h"
 #import "MusicDetailCell.h"
 #import "PlayView.h"
 
@@ -19,6 +20,7 @@
 @property (nonatomic, strong) NSString *songDownloadPlistPath;
 @property (nonatomic, strong) NSMutableArray *cellArr;
 @property (nonatomic, strong) NSURL *location;
+@property (nonatomic, strong) NSMutableArray *favorArr;
 @end
 
 @implementation MusicListViewController
@@ -97,6 +99,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     self.navigationController.hidesBottomBarWhenPushed = NO;
+    [self.navigationController.navigationBar setTranslucent:YES];
 }
 
 - (void)viewDidLoad {
@@ -105,6 +108,22 @@
     self.tableView.backgroundView.alpha = 0.6;
     [Factory addBackItemToVC:self];
     [self.tableView.mj_header beginRefreshing];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setTranslucent:NO];
+    BmobQuery *bmobQuery = [BmobQuery new];
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSString *bql = [NSString stringWithFormat:@"select * from ZY_SongFavor where userId = '%@'",delegate.userId];
+    self.favorArr = [NSMutableArray new];
+    [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
+        if (result) {
+            for (BmobObject *obj in result.resultsAry) {
+                [self.favorArr addObject:obj];
+            }
+        }
+    }];
 }
 
 - (void)receiveProgress:(NSInteger)index{
@@ -119,7 +138,7 @@
             //下载时间
             NSMutableArray *array = [NSMutableArray arrayWithContentsOfFile:self.songDownloadPlistPath];
             NSString *urlStr = [NSString stringWithFormat:@"%@",[self.musicVM musicURLForRow:index - 100]];
-            NSDictionary *dic = @{@"song":cell.titleLb.text,@"duration":cell.durationLb.text,@"singer":cell.sourceLb.text,@"album":self.navigationItem.title,@"time":[self dateForStandardYMdHmsS],@"url": urlStr};
+            NSDictionary *dic = @{@"song":cell.titleLb.text,@"duration":cell.durationLb.text,@"singer":cell.sourceLb.text,@"album":self.navigationItem.title,@"time":[self dateForStandardYMdHmsS],@"url": urlStr,@"cover":[self.musicVM largeCoverURLForRow:index - 100]};
             [array addObject:dic];
             [array writeToFile:self.songDownloadPlistPath atomically:YES];
             [self.cellArr removeObject:cell];
@@ -158,49 +177,73 @@
         }
     }
     [cell.downloadBtn bk_addEventHandler:^(id sender) {
-        if(cell.startOrFinish == -1){
-            cell.downloadBtn.selected = YES;
-            NSLog(@"开始下载。。。");
-            [cell downLoadMusicURL:[NSURL URLWithString:[self.musicVM musicURLForRow:indexPath.row]]];
-            //图片以png格式保存
-            NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-            NSString *rootPath = [docPath stringByAppendingPathComponent:@"Image"];
-            BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
-            if (PNGisSuccess) {
-                NSString *filePath = piece_together(rootPath, cell.titleLb.text, self.navigationItem.title, @"png");
-                NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.musicVM largeCoverURLForRow:indexPath.row]]];
-                [imageData writeToFile:filePath atomically:YES];
-                NSLog(@"下载图片成功");
-            }
-            [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloading"] forState:UIControlStateSelected];
-            self.cell = cell;
-            cell.tag = indexPath.row + 100;
-            [self.cellArr addObject:cell];
-        }else if(cell.startOrFinish == 0){
-            if(cell.downloadBtn.selected == YES){
-                cell.downloadBtn.selected = NO;
-                [cell downloadPause];
-                [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"find_album_pause"] forState:UIControlStateNormal];
-            }else{
+        if (ZYDelegate.downloadUnderWWAN || ZYDelegate.onLine == 2) {
+            if(cell.startOrFinish == -1){
                 cell.downloadBtn.selected = YES;
-                [cell downloadResume];
+                NSLog(@"开始下载。。。");
+                [cell downLoadMusicURL:[NSURL URLWithString:[self.musicVM musicURLForRow:indexPath.row]]];
+                //图片以png格式保存
+                NSString *rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Image"];
+                BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
+                if (PNGisSuccess) {
+                    NSString *filePath = piece_together(rootPath, cell.titleLb.text, self.navigationItem.title, @"png");
+                    NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.musicVM largeCoverURLForRow:indexPath.row]]];
+                    [imageData writeToFile:filePath atomically:YES];
+                    NSLog(@"下载图片成功");
+                }
                 [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloading"] forState:UIControlStateSelected];
+                self.cell = cell;
+                cell.tag = indexPath.row + 100;
+                [self.cellArr addObject:cell];
+            }else if(cell.startOrFinish == 0){
+                if(cell.downloadBtn.selected == YES){
+                    cell.downloadBtn.selected = NO;
+                    [cell downloadPause];
+                    [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"find_album_pause"] forState:UIControlStateNormal];
+                }else{
+                    cell.downloadBtn.selected = YES;
+                    [cell downloadResume];
+                    [cell.downloadBtn setBackgroundImage:[UIImage imageNamed:@"cell_downloading"] forState:UIControlStateSelected];
+                }
             }
+        } else if (ZYDelegate.onLine == 0){
+            [self showMsg:@"下载失败，请检查网络"];
+        } else if (ZYDelegate.onLine == 1 && ZYDelegate.downloadUnderWWAN == NO){
+            [self showMsg:@"现在您使用的是流量哦,请设置后再下载"];
         }
     } forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     PlayViewController *vc = [[PlayViewController alloc] init];
-    vc.musicListType = networkMusicType;
+    [PlayView sharedInstance].musicListType = networkMusicType;
     NSDictionary *dic = @{@"song":[self.musicVM titleForRow:indexPath.row],@"duration":[self.musicVM durationForRow:indexPath.row],@"singer":[self.musicVM sourceForRow:indexPath.row],@"album":self.navigationItem.title,@"time":[self dateForStandardYMdHmsS],@"url": [self.musicVM musicURLForRow:indexPath.row]};
     [PlayView sharedInstance].musicDic = dic;
     [PlayView sharedInstance].coverImageURL = [self.musicVM largeCoverURLForRow:indexPath.row];
-    vc.musicVM = self.musicVM;
+    [PlayView sharedInstance].songId = indexPath.row;
+    [PlayView sharedInstance].isNetMusicList = YES;
     vc.album = self.navigationItem.title;
-    [self presentViewController:vc animated:YES completion:nil];
-    [[PlayView sharedInstance] playWithURL:[NSURL URLWithString:[self.musicVM musicURLForRow:indexPath.row]]];
+    if (ZYDelegate.listenUnderWWAN || ZYDelegate.onLine == 2) {
+        [[PlayView sharedInstance] playWithURL:[NSURL URLWithString:[self.musicVM musicURLForRow:indexPath.row]]];
+        [self presentViewController:vc animated:YES completion:nil];
+    } else if (ZYDelegate.listenUnderWWAN == NO && ZYDelegate.onLine == 1) {
+        [self showMsg:@"您现在使用的是流量，请设置后收听"];
+        return;
+    } else {
+        [self showMsg:@"请检查网络"];
+        return;
+    }
+    
+    [[PlayView sharedInstance] setAlbumCoverImgVRotation];
+    NSInteger i = 0;
+    [[PlayView sharedInstance].playingList removeAllObjects];
+    for (AlbumTracksListModel *ATL in self.musicVM.dataArr) {
+        NSDictionary *dic = @{@"id":[NSString stringWithFormat:@"%ld",i],@"song":ATL.title,@"duration":[NSString stringWithFormat:@"%02ld:%02ld",(NSInteger)ATL.duration / 60, (NSInteger)ATL.duration % 60],@"singer":ATL.nickname,@"album":self.navigationItem.title,@"cover":ATL.coverLarge,@"url": ATL.playUrl64};
+        [[PlayView sharedInstance].playingList addObject:dic];
+        i++;
+    }
 }
 
 //允许自动布局

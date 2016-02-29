@@ -10,7 +10,6 @@
 #define margin 5
 
 @implementation SongTitleScrollView{
-    
     NSInteger count;
     NSTimer *t1;
     NSTimer *t2;

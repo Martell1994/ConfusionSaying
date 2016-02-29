@@ -27,7 +27,6 @@
 @property (nonatomic, strong) NSTimer *countDownTimer;
 @property (nonatomic, assign) BOOL codeCorrect;
 @property (nonatomic, assign) BOOL phoneCorrect;
-@property (nonatomic, strong) MBProgressHUD *HUD;
 @property (weak, nonatomic) IBOutlet UILabel *versionLB;
 
 @end
@@ -35,9 +34,6 @@
 @implementation RegisterViewController
 
 kEndEditing
-initHUDView
-errorHUD
-successHUD
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -118,7 +114,7 @@ successHUD
     if ([self nameAllowOrNot] && [self pwdAllowOrNot] && [self pwdEqualTo] && self.codeCorrect && self.phoneCorrect) {
         [self registerOnBmob];
     } else {
-        [self showErrorHUD:@"信息有误,注册失败"];
+        [self showErrorMsg:@"信息有误,注册失败"];
     }
 }
 
@@ -132,7 +128,7 @@ successHUD
 
 - (IBAction)registerAcc:(id)sender {
     if ([self isTFEmpty:_nameTF] || [self isTFEmpty:_pwdTF] || [self isTFEmpty:_pwdATF] || [self isTFEmpty:_phoneTF] || [self isTFEmpty:_smsCodeTF]) {
-        [self showErrorHUD:@"信息不能为空"];
+        [self showErrorMsg:@"信息不能为空"];
     }
     [_smsCodeTF resignFirstResponder];
 }
@@ -148,7 +144,7 @@ successHUD
             [self showSuccessMsg:@"恭喜!注册成功"];
             [self dismissViewControllerAnimated:YES completion:nil];
         } else {
-            [self showErrorHUD:@"注册失败!请检查网络"];
+            [self showErrorMsg:@"注册失败!请检查网络"];
         }
     }];
 }

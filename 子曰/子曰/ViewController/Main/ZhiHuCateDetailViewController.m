@@ -48,16 +48,21 @@
     return _zhCDVM;
 }
 
-
 - (UIImageView *)headView{
     if (!_headView) {
         _headView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, kWindowW, 128)];
-        [_headView sd_setImageWithURL:[self.zhCDVM imageUrl] placeholderImage:[UIImage imageNamed:@"News_Avatar"]];
     }
     return _headView;
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle{
+    NSLog(@"x");
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    NSLog(@"xx");
     //设置导航栏为透明
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navi_transparent"] forBarMetrics:UIBarMetricsDefault];
     [self.navigationController.navigationBar setTranslucent:YES];
@@ -66,6 +71,11 @@
     if ([self.navigationController.navigationBar respondsToSelector:@selector(shadowImage)]){
         [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navi_white"] forBarMetrics:UIBarMetricsDefault];
 }
 
 - (void)viewDidLoad {
@@ -80,6 +90,7 @@
         }
         [self.tableView.mj_header endRefreshing];
         [self.view addSubview:self.headView];
+        [self.headView sd_setImageWithURL:[self.zhCDVM imageUrl] placeholderImage:[UIImage imageNamed:@"News_Avatar"]];
         self.title = [self.zhCDVM name];
         [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:1],NSForegroundColorAttributeName:[UIColor whiteColor]}];
     }];

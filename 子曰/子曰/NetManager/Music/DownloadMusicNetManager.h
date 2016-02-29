@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol DownloadMusicNetManagerDelegate <NSObject>
+//@optional
 - (void)tellyouProgress:(CGFloat)progress;
 /** 
  * 0为MP3，1为PNG

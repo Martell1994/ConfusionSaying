@@ -33,7 +33,7 @@
 
 //通过RGB设置颜色
 #define kRGBColor(R,G,B)        [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1.0]
-//设置tintColor
+//设置tintColor #6E996A
 #define dColor kRGBColor(110, 153, 106)
 
 #define kWindowH   [UIScreen mainScreen].bounds.size.height //应用程序的屏幕高度
@@ -50,38 +50,6 @@
 #define LB20 [UIFont fontWithName:@"STLibian-SC-Regular" size:20]
 #define LB15 [UIFont fontWithName:@"STLibian-SC-Regular" size:15]
 
-//初始化HUD
-#define initHUDNav - (MBProgressHUD *)HUD { \
-                     if (!_HUD) { \
-                         _HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view]; \
-                         [self.view addSubview:_HUD]; \
-                         _HUD.delegate = self; \
-                         _HUD.dimBackground = YES; } \
-                     return _HUD; }
-
-#define initHUDView - (MBProgressHUD *)HUD { \
-                        if (!_HUD) { \
-                            _HUD = [[MBProgressHUD alloc] initWithView:self.view]; \
-                            [self.view addSubview:_HUD]; \
-                            _HUD.delegate = self; \
-                            _HUD.dimBackground = YES; } \
-                        return _HUD; }
-
-#define errorHUD - (void)showErrorHUD:(NSString *)msg { \
-                    self.HUD.customView = nil; \
-                    _HUD.mode = MBProgressHUDModeCustomView; \
-                    _HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageError"]]; \
-                    _HUD.labelText = msg; \
-                    [_HUD show:YES]; \
-                    [_HUD hide:YES afterDelay:2];}
-
-#define successHUD - (void)completeHub:(NSString *)label { \
-                    _HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]]; \
-                    _HUD.mode = MBProgressHUDModeCustomView; \
-                    _HUD.labelText = label; \
-                    [_HUD show:YES]; \
-                    [_HUD hide:YES afterDelay:2];}
-
 #define piece_together(path,txt1,txt2,extension) [[[[path stringByAppendingPathComponent:txt1] stringByAppendingString:@"-"] stringByAppendingString:txt2] stringByAppendingPathExtension:extension]
 
 //文件管理器对象
@@ -89,5 +57,8 @@
 
 //文件路径
 #define DirectoriesPath NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject
+
+//delegate对象
+#define ZYDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 #endif /* Contants_h */

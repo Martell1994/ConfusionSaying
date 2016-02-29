@@ -15,9 +15,9 @@
         _headImgV = [UIImageView new];
         [self addSubview:_headImgV];
         [_headImgV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(8);
+            make.top.mas_equalTo(6);
             make.left.mas_equalTo(16);
-            make.size.mas_equalTo(CGSizeMake(75, 64));
+            make.size.mas_equalTo(CGSizeMake(80, 64));
         }];
         _headImgV.backgroundColor = [UIColor grayColor];
     }
@@ -32,10 +32,10 @@
             make.top.mas_equalTo(8);
             make.right.mas_equalTo(-10);
             make.width.mas_equalTo(55);
-            make.height.mas_equalTo(12);
+            make.height.mas_equalTo(10);
         }];
         _timeLb.font = [UIFont systemFontOfSize:12];
-        _timeLb.textColor = [UIColor lightGrayColor];
+        _timeLb.textColor = [UIColor grayColor];
         _timeLb.textAlignment = NSTextAlignmentRight;
     }
     return _timeLb;
@@ -46,10 +46,10 @@
         _titleLb = [UILabel new];
         [self addSubview:_titleLb];
         [_titleLb mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.timeLb.mas_bottom).mas_equalTo(5);
+            make.top.mas_equalTo(self.timeLb.mas_bottom).mas_equalTo(2);
             make.left.mas_equalTo(self.headImgV.mas_right).mas_equalTo(10);
             make.right.mas_equalTo(-10);
-            make.bottom.mas_equalTo(-8);
+            make.bottom.mas_equalTo(self.headImgV.mas_bottom);
         }];
         _titleLb.numberOfLines = 0;
     }

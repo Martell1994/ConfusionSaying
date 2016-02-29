@@ -7,6 +7,8 @@
 //
 
 #import "AboutViewController.h"
+#import "IntroduceViewController.h"
+#import "NotificationViewController.h"
 #import "SuggestViewController.h"
 
 @interface AboutViewController ()<UITableViewDelegate, UITableViewDataSource>
@@ -60,11 +62,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row == 2) {
-        self.hidesBottomBarWhenPushed = YES;
-        SuggestViewController *sVC = [[SuggestViewController alloc] init];
+    self.hidesBottomBarWhenPushed = YES;
+    if (indexPath.row == 0) {
+        IntroduceViewController *iVC = [IntroduceViewController new];
+        [self.navigationController pushViewController:iVC animated:YES];
+    } else if (indexPath.row == 1) {
+        NotificationViewController *nVC = [NotificationViewController new];
+        [self.navigationController pushViewController:nVC animated:YES];
+    }else {
+        SuggestViewController *sVC = [SuggestViewController new];
         [self.navigationController pushViewController:sVC animated:YES];
-//        self.hidesBottomBarWhenPushed = NO;
     }
 }
 

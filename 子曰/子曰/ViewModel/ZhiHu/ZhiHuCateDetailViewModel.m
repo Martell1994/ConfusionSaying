@@ -44,7 +44,6 @@
 }
 
 - (NSURL *)imageUrl{
-    NSLog(@"imageUrl:%@,name:%@", self.zhCDModel.image,self.zhCDModel.name);
     return [NSURL URLWithString:self.zhCDModel.image];
 }
 

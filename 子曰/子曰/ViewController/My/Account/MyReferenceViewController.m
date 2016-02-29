@@ -27,9 +27,6 @@
 plistPath_lazy
 kEndEditing
 getPlistDic
-initHUDNav
-errorHUD
-successHUD
 
 - (UIImageView *)headImageView {
     if(_headImageView == nil) {
@@ -119,9 +116,9 @@ successHUD
     [user setObject:self.bmobFileURL forKey:@"userImg"];
     [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
         if (isSuccessful) {
-            [self completeHub:@"保存成功"];
+            [self showSuccessMsg:@"保存成功"];
         } else {
-            [self completeHub:@"保存失败,请检查网络"];
+            [self showErrorMsg:@"保存失败,请检查网络"];
         }
     }];
 }
@@ -130,7 +127,7 @@ successHUD
     EditAccCell *nameCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     EditAccCell *pwdCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
     if ([nameCell.textField.text isEqualToString:@""] || [pwdCell.textField.text isEqualToString:@""]) {
-        [self showErrorHUD:@"昵称与密码不能为空"];
+        [self showErrorMsg:@"昵称与密码不能为空"];
     } else{
         self.HUD.labelText = @"正在保存";
         _HUD.customView = nil;

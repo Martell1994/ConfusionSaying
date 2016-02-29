@@ -7,7 +7,7 @@
 //
 
 #import "NSObject+Common.h"
-#define kToastDuration     1
+#define kToastDuration     1.5
 
 @implementation NSObject (Common)
 
@@ -15,7 +15,8 @@
 - (void)showErrorMsg:(NSObject *)msg{
     [self hideProgress];
     MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:[self currentView] animated:YES];
-    progressHUD.mode = MBProgressHUDModeText;
+    progressHUD.mode = MBProgressHUDModeCustomView;
+    progressHUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ImageError"]];
     progressHUD.labelText = msg.description;
     [progressHUD hide:YES afterDelay:kToastDuration];
 }
@@ -24,14 +25,15 @@
 - (void)showSuccessMsg:(NSObject *)msg{
     [self hideProgress];
     MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:[self currentView] animated:YES];
-    progressHUD.mode = MBProgressHUDModeText;
+    progressHUD.mode = MBProgressHUDModeCustomView;
+    progressHUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.png"]];
     progressHUD.labelText = msg.description;
     [progressHUD hide:YES afterDelay:kToastDuration];
 }
 
-- (void)showMsg:(NSObject *)msg OnView:(UIView *)view {
+- (void)showMsg:(NSObject *)msg {
     [self hideProgress];
-    MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:[self currentView] animated:YES];
     progressHUD.mode = MBProgressHUDModeText;
     progressHUD.labelText = msg.description;
     [progressHUD hide:YES afterDelay:kToastDuration];
@@ -45,26 +47,29 @@
 
 - (void)showProgressOn:(UIView *)view {
     MBProgressHUD *progressHUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
-    [progressHUD hide:YES afterDelay:kToastDuration];
+    [progressHUD hide:YES afterDelay:10];
 }
 
 //隐藏提示
 - (void)hideProgress{
     [MBProgressHUD hideAllHUDsForView:[self currentView] animated:YES];
 }
+- (void)hideProgressOn:(UIView *)view{
+   [MBProgressHUD hideAllHUDsForView:view animated:YES];
+}
 
 - (UIView *)currentView{
-    UIViewController *controller = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    if ([controller isKindOfClass:[UITabBarController class]]) {
-        controller = [(UITabBarController *)controller selectedViewController];
-    }
-    if([controller isKindOfClass:[UINavigationController class]]) {
-        controller = [(UINavigationController *)controller visibleViewController];
-    }
-    if (!controller) {
+//    UIViewController *controller = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//    if ([controller isKindOfClass:[UITabBarController class]]) {
+//        controller = [(UITabBarController *)controller selectedViewController];
+//    }
+//    if([controller isKindOfClass:[UINavigationController class]]) {
+//        controller = [(UINavigationController *)controller visibleViewController];
+//    }
+//    if (!controller) {
         return [UIApplication sharedApplication].keyWindow;
-    }
-    return controller.view;
+//    }
+//    return controller.view;
 }
 
 @end

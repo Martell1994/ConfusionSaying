@@ -50,6 +50,16 @@
     return _delegate;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setTranslucent:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setTranslucent:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //出发webview懒加载
@@ -68,7 +78,7 @@
         [self favorTap];
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
-            [self showErrorMsg:@"请先登录"];
+            [self showMsg:@"请先登录"];
         }];
     }
 }
@@ -86,7 +96,7 @@
                     BmobObject *cancelObject = [BmobObject objectWithoutDatatWithClassName:@"ZY_NewsFavor" objectId:[obj objectId]];
                     [cancelObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
                         if (isSuccessful) {
-                            [self showMsg:@"取消收藏" OnView:self.view];
+                            [self showMsg:@"取消收藏"];
                             self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collect"];
                             _favorOrNot = NO;
                             [self favorTap];
@@ -109,7 +119,7 @@
             [newsFavor setObject:self.imgStr forKey:@"newsImage"];
             [newsFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
-                    [self showMsg:@"收藏成功" OnView:self.view];
+                    [self showMsg:@"收藏成功"];
                     self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collected"];
                     _favorOrNot = YES;
                     [self favorTap];
@@ -121,8 +131,8 @@
     }
 }
 
-#pragma mark - ******************** 拼接html语言
-- (void)showInWebView{
+#pragma mark - 拼接html语言
+- (void)showInWebView {
     NSMutableString *html = [NSMutableString string];
     [html appendString:@"<html>"];
     [html appendString:@"<head>"];
@@ -135,8 +145,7 @@
     [self.webView loadHTMLString:html baseURL:nil];
 }
 
-- (NSString *)touchBody
-{
+- (NSString *)touchBody {
     NSMutableString *body = [NSMutableString string];
     [body appendFormat:@"<div class=\"title\">%@</div>",[self.nhVM title]];
     [body appendFormat:@"<div class=\"time\">%@</div>",[self.nhVM ptime]];
@@ -169,12 +178,14 @@
     }
     return body;
 }
+
 #pragma mark - ******************** 保存到相册方法
 - (void)savePictureToAlbum:(NSString *)src
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要保存到相册吗？" preferredStyle:UIAlertControllerStyleActionSheet];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        [self showSuccessMsg:@"保存成功"];
         NSURLCache *cache =[NSURLCache sharedURLCache];
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:src]];
         NSData *imgData = [cache cachedResponseForRequest:request].data;
@@ -203,7 +214,7 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
-    [self hideProgress];
+    [self hideProgressOn:self.view];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{

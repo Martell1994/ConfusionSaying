@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-#import "MainViewController.h"
+#import "PlayView.h"
 
 
 @interface LoginViewController ()<MBProgressHUDDelegate>
@@ -17,15 +17,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *registerBtn;
 @property (weak, nonatomic) IBOutlet UILabel *versionLB;
 @property (weak, nonatomic) IBOutlet UIButton *logoutBtn;
-@property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, copy) NSString *userPlistPath;
 @property (nonatomic, copy) NSString *userId;
 @end
 
 @implementation LoginViewController
-
-initHUDView
-errorHUD
 
 - (NSString *)userPlistPath {
     if (!_userPlistPath) {
@@ -70,28 +66,16 @@ errorHUD
 }
 
 - (IBAction)login:(id)sender {
-    MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:self.view];
-    [self.view addSubview:HUD];
-    HUD.delegate = self;
-    HUD.dimBackground = YES;
-    HUD.labelText = @"正在登录";
-    HUD.mode = MBProgressHUDModeIndeterminate;
-    [HUD showWhileExecuting:@selector(loginMethod) onTarget:self withObject:nil animated:YES];
-}
-
-- (IBAction)logout:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)loginMethod {
+    [self showProgressOn:self.view];
     NSString *bql = [NSString stringWithFormat:@"select *from ZY_User where userPhone = '%@' and userPwd = '%@'", _nameTF.text, _pwdTF.text];
     BmobQuery *bmobQuery = [[BmobQuery alloc]init];
     [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
+        [self hideProgressOn:self.view];
         if (error) {
-            [self showErrorHUD:@"登录失败!请检查网络"];
+            [self showErrorMsg:@"登录失败!请检查网络"];
         } else {
             if (result.resultsAry.count == 0) {
-                [self showErrorHUD:@"登录失败!用户名或密码有误"];
+                [self showErrorMsg:@"登录失败!用户名或密码有误"];
             } else {
                 [self saveToPlist:result];
                 [self jumpToTabBarController];
@@ -100,14 +84,19 @@ errorHUD
     }];
 }
 
+- (IBAction)logout:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 //跳转界面
 - (void)jumpToTabBarController {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UITabBarController *tabbar = [storyboard instantiateViewControllerWithIdentifier:@"UITabBarController"];
     [self presentViewController:tabbar animated:YES completion:nil];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    delegate.loginOrNot = 1;
-    delegate.userId =self.userId;
+    
+    //[self showViewController:[UIApplication sharedApplication].keyWindow.rootViewController sender:nil];
+    ZYDelegate.loginOrNot = 1;
+    ZYDelegate.userId =self.userId;
 }
 
 //将登录信息保存到数据库
@@ -126,7 +115,7 @@ errorHUD
     //头像
     NSString *headImage = [obj objectForKey:@"userImg"];
     gender = (gender == nil) ? @"未设置" : gender;
-    NSDictionary *dic = @{@"id":self.userId, @"name":userName, @"phone":_nameTF.text, @"pwd":_pwdTF.text, @"createdTime":[dateFormatter stringFromDate:createdData], @"headerImage":headImage, @"gender":gender, @"city":@"未定位"};
+    NSDictionary *dic = @{@"id":self.userId, @"name":userName, @"phone":_nameTF.text, @"pwd":_pwdTF.text, @"createdTime":[dateFormatter stringFromDate:createdData], @"headerImage":headImage, @"gender":gender};
     [dic writeToFile:self.userPlistPath atomically:YES];
 }
 

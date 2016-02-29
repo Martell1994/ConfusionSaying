@@ -10,18 +10,26 @@
 #import "NewsHtmlViewController.h"
 #import "NewsCell.h"
 
-@interface FavorNewsViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface FavorNewsViewController ()<UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UISearchResultsUpdating>
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSMutableArray *newsArr;
+@property (nonatomic, strong) NSMutableArray *searchList;
+
 @end
 
 @implementation FavorNewsViewController
 
-- (NSMutableArray *)newsArr {
-    if (!_newsArr) {
-        _newsArr = [NSMutableArray new];
+- (UISearchController *)searchController {
+    if (!_searchController) {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        _searchController.searchResultsUpdater = self;
+        _searchController.dimsBackgroundDuringPresentation = NO;
+        _searchController.hidesNavigationBarDuringPresentation = NO;
+        _searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
+        self.tableView.tableHeaderView = self.searchController.searchBar;
     }
-    return  _newsArr;
+    return _searchController;
 }
 
 -(UITableView *)tableView {
@@ -37,32 +45,58 @@
     return _tableView;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.searchController.searchBar setHidden:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.searchController.active) {
+        self.searchController.active = NO;
+        [self.searchController.searchBar setHidden:YES];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"收藏的新闻";
+    self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"news_bg"]];
+    self.tableView.tableFooterView = [UIView new];
+    [Factory addBackItemToVC:self];
+    self.newsArr = [NSMutableArray new];
+    self.searchList = [NSMutableArray new];
     BmobQuery *bmobQuery = [BmobQuery new];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *bql = [NSString stringWithFormat:@"select * from ZY_NewsFavor where userId = '%@'",delegate.userId];
+    [self showProgressOn:self.view];
+    NSString *bql = [NSString stringWithFormat:@"select * from ZY_NewsFavor where userId = '%@'",ZYDelegate.userId];
     [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
         if (result) {
+            [self hideProgressOn:self.view];
             for (BmobObject *obj in result.resultsAry) {
                 [self.newsArr addObject:obj];
             }
             [self.tableView reloadData];
         }
     }];
-    self.tableView.tableFooterView = [UIView new];
-    [Factory addBackItemToVC:self];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.newsArr.count;
+    if (self.searchController.active) {
+        return self.searchList.count;
+    } else {
+        return self.newsArr.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewsCell *cell = [[NewsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    cell.backgroundColor = [UIColor whiteColor];
-    BmobObject *obj = self.newsArr[indexPath.row];
+    cell.backgroundColor = [UIColor clearColor];
+    BmobObject *obj = nil;
+    if (self.searchController.active) {
+        obj = self.searchList[indexPath.row];
+    } else {
+        obj = self.newsArr[indexPath.row];
+    }
     cell.titleLb.text = [obj objectForKey:@"newsTitle"];
     NSString *dateStr = [obj objectForKey:@"createdAt"];
     NSArray *arr = [dateStr componentsSeparatedByString:@"-"];
@@ -74,12 +108,67 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.hidesBottomBarWhenPushed = YES;
-    NewsHtmlViewController *zhVC = [[NewsHtmlViewController alloc] initWithDocId:[self.newsArr[indexPath.row] objectForKey:@"newsId"]];
+    BmobObject *obj = nil;
+    if (self.searchController.active) {
+        obj = self.searchList[indexPath.row];
+    } else {
+        obj = self.newsArr[indexPath.row];
+    }
+    NewsHtmlViewController *zhVC = [[NewsHtmlViewController alloc] initWithDocId:[obj objectForKey:@"newsId"]];
+    zhVC.docTitle = [obj objectForKey:@"newsTitle"];
+    zhVC.imgStr = [obj objectForKey:@"newsImage"];
     [self.navigationController pushViewController:zhVC animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
+    return 76;
+}
+
+#pragma mark - 实现UISearchResultsUpdating的required的必须方法
+-(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
+    if (self.searchList!= nil) {
+        [self.searchList removeAllObjects];
+    }
+    //过滤数据
+    for (BmobObject *obj in _newsArr) {
+        if ([[obj objectForKey:@"newsTitle"] containsString:[self.searchController.searchBar text]]) {
+            [self.searchList addObject:obj];
+        }
+    }
+    //刷新表格
+    [self.tableView reloadData];
+}
+
+#pragma mark - 取消收藏
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.searchController.active) {
+        return NO;
+    }
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"取消收藏";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        BmobObject *deleteObj = self.newsArr[indexPath.row];
+        [deleteObj deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                [self.newsArr removeObject:deleteObj];
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            } else if (error) {
+                NSLog(@"取消收藏新闻时失败，原因为%@",error);
+            } else{
+                NSLog(@"取消收藏新闻时失败，原因未知");
+            }
+        }];
+    }
 }
 
 @end

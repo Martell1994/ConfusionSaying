@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DraggableButton.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -20,5 +21,6 @@
 @property (nonatomic, assign) BOOL listenUnderWWAN;
 //记录流量下是否可以下载音乐
 @property (nonatomic, assign) BOOL downloadUnderWWAN;
+
 @end
 

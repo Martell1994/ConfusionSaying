@@ -7,9 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "AppDelegate+Category.h"
 
 @interface AppDelegate ()
-@property (nonatomic, strong) NSString *songDownloadPlistPath;
+@property (nonatomic, copy) NSString *songDownloadPlistPath;
+@property (nonatomic, copy) NSString *settingPlistPath;
 @end
 
 @implementation AppDelegate
@@ -21,13 +23,25 @@
     return _songDownloadPlistPath;
 }
 
+- (NSString *)settingPlistPath {
+    if (!_settingPlistPath) {
+        _settingPlistPath = [DirectoriesPath stringByAppendingPathComponent:@"setting.plist"];
+    }
+    return _settingPlistPath;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [self initializeWithApplication:application];
     self.window.tintColor = dColor;//修改整个应用程序的风格颜色
     [SMSSDK registerApp:smsKey withSecret:smsSecret];
     [Bmob registerWithAppKey:bmobKey];
     NSArray *arr = [NSArray new];
     if (![fileManager fileExistsAtPath:self.songDownloadPlistPath]) {
         [arr writeToFile:self.songDownloadPlistPath atomically:YES];
+    }
+    NSDictionary *settingDic = @{@"city":@"未定位",@"temperature":@" ",@"weather":@" ",@"pollution":@" ",@"listenUnderWWAN":@0,@"downloadUnderWWAN":@0};
+    if (![fileManager fileExistsAtPath:self.settingPlistPath]) {
+        [settingDic writeToFile:self.settingPlistPath atomically:YES];
     }
     return YES;
 }

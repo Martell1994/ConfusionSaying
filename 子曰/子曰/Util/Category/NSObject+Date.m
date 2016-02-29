@@ -16,7 +16,6 @@
     NSString *timeFormatter = [dateFormatter stringFromDate:currentTime];
     return timeFormatter;
 }
-
 - (NSString *)dateForYMdHmsS{
     NSDate *currentTime = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -24,12 +23,13 @@
     NSString *timeFormatter = [dateFormatter stringFromDate:currentTime];
     return timeFormatter;
 }
-
-- (NSString *)dateForYYMMddWithDate:(NSDate *)date {
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy/MM/dd"];
-    NSString *timeFormatter = [dateFormatter stringFromDate:date];
-    timeFormatter = [timeFormatter substringFromIndex:2];
-    return timeFormatter;
+- (NSTimeInterval)timeByInterval:(NSString *)time {
+    NSArray *array = [time componentsSeparatedByString:@":"];
+    NSString *min = array[0];
+    NSString *sec = array[1];
+    return [min integerValue] * 60 + [sec integerValue];
+}
+- (NSString *)stringByTime:(NSTimeInterval)time {
+    return [NSString stringWithFormat:@"%02d:%02d",(int)time / 60, (int)time % 60];
 }
 @end

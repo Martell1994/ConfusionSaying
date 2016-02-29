@@ -11,5 +11,4 @@
 @interface AppDelegate (Category)
 
 - (void)initializeWithApplication:(UIApplication *)application;
-
 @end

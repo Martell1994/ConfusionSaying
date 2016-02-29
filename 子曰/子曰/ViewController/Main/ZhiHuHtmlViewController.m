@@ -73,6 +73,15 @@
     return _bodyNilIV;
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.navigationController.navigationBar setTranslucent:NO];
+}
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setTranslucent:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -80,36 +89,31 @@
         self.navigationController.navigationBar.backgroundColor = [UIColor whiteColor];
     } else {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navi_white"] forBarMetrics:UIBarMetricsDefault];
-        [self.navigationController.navigationBar setTranslucent:NO];
     }
     if (self.delegate.loginOrNot) {
         [self favorTap];
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
-            [self showErrorMsg:@"请先登录"];
+            [self showMsg:@"请先登录"];
         }];
     }
     [self.zhVM refreshDataByStoryId:self.storyId CompleteHandle:^(NSError *error) {
-        self.htmlStr = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" href=%@></head><body>%@</body></html>",self.zhVM.css[0],self.zhVM.body];
-        [self.webView loadHTMLString:self.htmlStr baseURL:nil];
-        //判断页面上方有无图片
-        if ([self.zhVM image]) {
-            [self.webView.scrollView addSubview:self.topIV];
-            [self.topIV sd_setImageWithURL:[self.zhVM image] placeholderImage:[UIImage imageNamed:@"News_Avatar"]];
-            [self.topIV mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(0);
-                make.left.mas_equalTo(0);
-                //css文件中得到的头部图片的高度为200（搜索.img-place-holder属性）
-                make.size.mas_equalTo(CGSizeMake(kWindowW, 200));
-            }];
-        }
-        //判断页面body有无内容
-        if (![self.zhVM body]) {
-            self.bodyNilIV.image = [UIImage imageNamed:@"News_NilContent"];
-            [self.view addSubview:self.bodyNilIV];
-            [self.bodyNilIV mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.mas_equalTo(0);
-            }];
+        if ([self.zhVM body] == nil) {
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[self.zhVM shareUrl]]];
+        }else{
+            self.htmlStr = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" href=%@></head><body>%@</body></html>",self.zhVM.css[0],self.zhVM.body];
+            [self.webView loadHTMLString:self.htmlStr baseURL:nil];
+            //判断页面上方有无图片
+            if ([self.zhVM image]) {
+                [self.webView.scrollView addSubview:self.topIV];
+                [self.topIV sd_setImageWithURL:[self.zhVM image] placeholderImage:[UIImage imageNamed:@"News_Avatar"]];
+                [self.topIV mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.mas_equalTo(0);
+                    make.left.mas_equalTo(0);
+                    //css文件中得到的头部图片的高度为200（搜索.img-place-holder属性）
+                    make.size.mas_equalTo(CGSizeMake(kWindowW, 200));
+                }];
+            }
         }
     }];
     for (id subview in self.webView.subviews){
@@ -134,7 +138,7 @@
                     BmobObject *cancelObject = [BmobObject objectWithoutDatatWithClassName:@"ZY_ArticleFavor" objectId:[obj objectId]];
                     [cancelObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
                         if (isSuccessful) {
-                            [self showMsg:@"取消收藏" OnView:self.view];
+                            [self showMsg:@"取消收藏"];
                             self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collect"];
                             _favorOrNot = NO;
                             [self favorTap];
@@ -158,7 +162,7 @@
             [articleFavor setObject:storyId forKey:@"articleId"];
             [articleFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
-                    [self showMsg:@"收藏成功" OnView:self.view];
+                    [self showMsg:@"收藏成功"];
                     self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collected"];
                     _favorOrNot = YES;
                     [self favorTap];
@@ -203,11 +207,11 @@
     };";
     [webView stringByEvaluatingJavaScriptFromString:jsGetImages];//注入js方法
     [webView stringByEvaluatingJavaScriptFromString:@"getImages()"];
-    [self hideProgress];
+    [self hideProgressOn:self.view];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    NSLog(@"error");
+    [self  showErrorMsg:@"出错啦!"];
 }
 
 @end

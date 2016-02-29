@@ -17,11 +17,11 @@
         [_sourceLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(16);
             make.top.mas_equalTo(8);
-            make.height.mas_equalTo(14);
+            make.height.mas_equalTo(10);
             make.width.mas_equalTo(kWindowW / 2 - 13);
         }];
         _sourceLb.font = [UIFont systemFontOfSize:14];
-        _sourceLb.textColor = [UIColor lightGrayColor];
+        _sourceLb.textColor = [UIColor grayColor];
     }
     return _sourceLb;
 }
@@ -37,7 +37,7 @@
             make.height.mas_equalTo(15);
         }];
         _timeLb.font = [UIFont systemFontOfSize:12];
-        _timeLb.textColor = [UIColor lightGrayColor];
+        _timeLb.textColor = [UIColor grayColor];
         _timeLb.textAlignment = NSTextAlignmentRight;
     }
     return _timeLb;

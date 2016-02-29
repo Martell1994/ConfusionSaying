@@ -18,7 +18,11 @@
  */
 - (NSString *)dateForYMdHmsS;
 /**
- * 以YY/MM/dd的形式返回当前时间
+ * 将xx:xx转成xxx秒
  */
-- (NSString *)dateForYYMMddWithDate:(NSDate *)date;
+- (NSTimeInterval)timeByInterval:(NSString *)time;
+/**
+ * 将xxx秒转成xx:xx
+ */
+- (NSString *)stringByTime:(NSTimeInterval)time;
 @end

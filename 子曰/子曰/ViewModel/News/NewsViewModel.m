@@ -105,15 +105,6 @@
 - (NSArray *)imgextraForRow:(NSInteger)row{
     return [self newsTModelForRow:row].imgextra;
 }
-
-
-
-//- (NSURL *)urlForRow:(NSInteger)row{
-//    return [NSURL URLWithString:[self newsTModelForRow:row].url];
-//}
-//- (NSURL *)url3wForRow:(NSInteger)row{
-//    return [NSURL URLWithString:[self newsTModelForRow:row].url_3w];
-//}
 - (NSString *)docidForRow:(NSInteger)row{
     return [self newsTModelForRow:row].docid;
 }
@@ -136,28 +127,25 @@
             if (_size == 0) {
                 [self.newsArr removeAllObjects];
             }
-            
             NSMutableArray *tempArr = [NSMutableArray new];
             [tempArr addObjectsFromArray:model.T1348647853363];
             [tempArr removeObjectAtIndex:0];
-            
-            //判断digest是否为空（为了不做网易直播间的功能，digest为空为直播间的新闻）
             for (NewsTModel *tModel in [tempArr copy]) {
-//                NewsTModel *tModel = tempArr[i];
-                if ([tModel.digest isEqualToString:@""]) {
+                if (![[tModel.docid substringToIndex:1] isEqualToString:@"B"]) {
                     [tempArr removeObject:tModel];
                 }
             }
-            
             [self.newsArr addObjectsFromArray:tempArr];
-
             [self.newsTopArr removeAllObjects];
             NewsTModel *nTModel = model.T1348647853363[0];
             [self.newsTopArr addObjectsFromArray:nTModel.ads];
+            //过滤掉顶部滚动视图中的专题新闻
+            for (NewsAdsModel *nAdsModel in nTModel.ads) {
+                if ([nAdsModel.tag isEqualToString:@"special"]) {
+                    [self.newsTopArr removeObject:nAdsModel];
+                }
+            }
         }
-        
-        
-        
         complete(error);
     }];
 }

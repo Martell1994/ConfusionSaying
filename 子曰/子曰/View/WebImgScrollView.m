@@ -99,7 +99,7 @@ static CGFloat const animationDutation = 0.2f;
 
 
 - (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo{
-    [self showSuccessMsg:@"已保存至相册"];
+    [self showSuccessMsg:@"已添加到相册"];
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
