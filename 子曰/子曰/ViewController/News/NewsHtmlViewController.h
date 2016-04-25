@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface NewsHtmlViewController : UIViewController
-- (instancetype)initWithDocId:(NSString *)docId;
-@property(nonatomic,strong) NSString *docId;
+- (instancetype)initWithDocId:(NSString *)docId withNewsImage:(NSURL *)newsImage;
 @property (nonatomic, strong) NSString *docTitle;
 @property (nonatomic, strong) NSString *imgStr;
 @end

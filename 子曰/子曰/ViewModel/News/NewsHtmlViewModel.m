@@ -39,6 +39,10 @@
     return self.newsHtmlModel.title;
 }
 
+- (NSString *)sourceUrl {
+    return self.newsHtmlModel.source_url;
+}
+
 - (NSString *)body{
     return self.newsHtmlModel.body;
 }

@@ -63,7 +63,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.textLabel.text = [self.notiArr[indexPath.row] objectForKey:@"NotiTitle"];
+    cell.textLabel.text = [self.notiArr[indexPath.row] objectForKey:@"notiTitle"];
     NSString *dateStr = [self.notiArr[indexPath.row] objectForKey:@"createdAt"];
     NSArray *arr = [dateStr componentsSeparatedByString:@"-"];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@月%@日",arr[1],[arr[2] substringToIndex:2]];
@@ -74,7 +74,7 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     NotiDetailViewController *NDvc = [NotiDetailViewController new];
     NDvc.title = cell.textLabel.text;
-    NDvc.content = [self.notiArr[indexPath.row] objectForKey:@"NotiContent"];
+    NDvc.content = [self.notiArr[indexPath.row] objectForKey:@"notiContent"];
     [self.navigationController pushViewController:NDvc animated:YES];
 }
 

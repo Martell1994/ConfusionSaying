@@ -48,17 +48,17 @@
     _ic.scrollEnabled = self.newsVM.rowTopNum != 1;
     
     //添加底部视图
-    UIView *botoomView = [UIView new];
-    botoomView.backgroundColor = [UIColor clearColor];
-    [headView addSubview:botoomView];
-    [botoomView mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIView *bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor clearColor];
+    [headView addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.right.mas_equalTo(0);
         make.height.mas_equalTo(35);
     }];
     
     UIImageView *leftIV = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"night_photoset_list_cell_icon"]];
     
-    [botoomView addSubview:leftIV];
+    [bottomView addSubview:leftIV];
     [leftIV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(5);
         make.size.mas_equalTo(CGSizeMake(18, 18));
@@ -69,14 +69,14 @@
     _titleLb = [UILabel new];
     _titleLb.font = [UIFont systemFontOfSize:15 weight:1];
     _titleLb.textColor = [UIColor whiteColor];
-    [botoomView addSubview:_titleLb];
+    [bottomView addSubview:_titleLb];
     [_titleLb mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(leftIV.mas_right).mas_equalTo(5);
         make.centerY.mas_equalTo(0);
     }];
     _pageControl = [UIPageControl new];
     _pageControl.numberOfPages = self.newsVM.rowTopNum;
-    [botoomView addSubview:_pageControl];
+    [bottomView addSubview:_pageControl];
     [_pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-10);
         make.centerY.mas_equalTo(0);
@@ -137,17 +137,13 @@
 - (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index{
     self.tabBarController.tabBar.hidden = YES;
     if ([[self.newsVM tagTopForRow:index] isEqualToString:@"photoset"]) {
-        NewsPhotoViewController *npVC = [[NewsPhotoViewController alloc]initWithUrlString:[self.newsVM urlTopForRow:index]];
+        NewsPhotoViewController *npVC = [[NewsPhotoViewController alloc] initWithUrlString:[self.newsVM urlTopForRow:index] withNewsTitle:[self.newsVM titleTopForRow:index]];
         [self.navigationController pushViewController:npVC animated:YES];
     }else{
-        self.hidesBottomBarWhenPushed = YES;
-        NewsHtmlViewController *hlVC = [[NewsHtmlViewController alloc]initWithDocId:[self.newsVM docidTopForRow:index]];
+        NewsHtmlViewController *hlVC = [[NewsHtmlViewController alloc] initWithDocId:[self.newsVM docidTopForRow:index] withNewsImage:[self.newsVM imgsrcTopForRow:index]];
+        hlVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:hlVC animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
     }
-    
-    
-    
 }
 
 - (NewsViewModel *)newsVM{
@@ -164,7 +160,7 @@
         _tableView.delegate = self;
         [self.view addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(NaviHeight);
+            make.top.mas_equalTo(0);
             make.left.right.bottom.mas_equalTo(0);
         }];
     }
@@ -225,7 +221,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     self.hidesBottomBarWhenPushed = YES;
-    NewsHtmlViewController *nhVC = [[NewsHtmlViewController alloc]initWithDocId:[self.newsVM docidForRow:indexPath.row]];
+    NewsHtmlViewController *nhVC = [[NewsHtmlViewController alloc] initWithDocId:[self.newsVM docidForRow:indexPath.row] withNewsImage:[NSURL URLWithString:[self.newsVM imgsrcForRow:indexPath.row]]];
     nhVC.docTitle = [self.newsVM titleForRow:indexPath.row];
     nhVC.imgStr = [self.newsVM imgsrcForRow:indexPath.row];
     [self.navigationController pushViewController:nhVC animated:YES];

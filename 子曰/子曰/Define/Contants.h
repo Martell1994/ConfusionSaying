@@ -50,7 +50,7 @@
 #define LB20 [UIFont fontWithName:@"STLibian-SC-Regular" size:20]
 #define LB15 [UIFont fontWithName:@"STLibian-SC-Regular" size:15]
 
-#define piece_together(path,txt1,txt2,extension) [[[[path stringByAppendingPathComponent:txt1] stringByAppendingString:@"-"] stringByAppendingString:txt2] stringByAppendingPathExtension:extension]
+#define piece_together(path,txt,extension) [[path stringByAppendingPathComponent:txt] stringByAppendingPathExtension:extension]
 
 //文件管理器对象
 #define fileManager [NSFileManager defaultManager]

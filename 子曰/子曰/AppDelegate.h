@@ -21,6 +21,8 @@
 @property (nonatomic, assign) BOOL listenUnderWWAN;
 //记录流量下是否可以下载音乐
 @property (nonatomic, assign) BOOL downloadUnderWWAN;
+//播放方式
+@property (nonatomic, assign) NSInteger playType;
 
 @end
 

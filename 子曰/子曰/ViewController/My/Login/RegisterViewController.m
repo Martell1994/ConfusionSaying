@@ -209,10 +209,12 @@ kEndEditing
                 if (result.count == 0) {
                     _phone_empty.text = @"手机号可用";
                     _phone_empty.textColor = [UIColor lightGrayColor];
+                    self.getCodeBtn.enabled = YES;
                     self.phoneCorrect = YES;
                 } else {
                     _phone_empty.text = @"手机号已被注册";
                     _phone_empty.textColor = [UIColor redColor];
+                    self.getCodeBtn.enabled = NO;
                     self.phoneCorrect = NO;
                 }
             }

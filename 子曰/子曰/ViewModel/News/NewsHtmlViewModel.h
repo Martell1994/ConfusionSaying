@@ -15,6 +15,7 @@
 @property (nonatomic,strong) NewsHtmlModel *newsHtmlModel;
 
 - (NSString *)title;
+- (NSString *)sourceUrl;
 - (NSString *)ptime;
 - (NSString *)body;
 

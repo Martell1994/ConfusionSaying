@@ -30,6 +30,14 @@
     return [self newsPhotosModelForRow:row].note;
 }
 
+- (NSString *)url {
+    return self.newsPhotoModel.url;
+}
+
+- (NSURL *)cover {
+    return [NSURL URLWithString:self.newsPhotoModel.cover];
+}
+
 - (NSString *)setname{
     return self.newsPhotoModel.setname;
 }

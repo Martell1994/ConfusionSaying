@@ -37,9 +37,11 @@
 #import "NSObject+Common.h"
 #import "UIView+Rotation.h"
 #import "NSObject+Date.h"
+#import "UMSocial.h"
 
 #define AppKey @"5632e64ee0f55a7d7800760b"
 #define smsKey @"bbdae8c67eff"
 #define smsSecret @"d1ba26eff1327ac7b70aebd6a65d6f31"
 #define bmobKey @"ecab3144fad86fd164d3d0ffe1852ed8"
+#define UMSocialKey @"5632e64ee0f55a7d7800760b"
 #endif /* ZYPrefixHeader_pch */

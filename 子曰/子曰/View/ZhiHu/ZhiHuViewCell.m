@@ -31,7 +31,6 @@
             make.top.mas_equalTo(self.iv.mas_top);
             make.right.mas_equalTo(self.iv.mas_left).mas_equalTo(-10);
         }];
-        
     }
     return self;
 }

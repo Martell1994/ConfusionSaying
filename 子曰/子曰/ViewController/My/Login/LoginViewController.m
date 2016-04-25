@@ -99,20 +99,15 @@
     ZYDelegate.userId =self.userId;
 }
 
-//将登录信息保存到数据库
+//将登录信息保存到本地数据库
 - (void)saveToPlist:(BQLQueryResult *)result {
     BmobObject *obj = (BmobObject *)result.resultsAry[0];
-    //用户ID
     self.userId = [obj objectId];
-    //创建日期
     NSDate *createdData = [obj createdAt];
     NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    //用户名
     NSString *userName = [obj objectForKey:@"userName"];
-    //用户性别
     NSString *gender = [obj objectForKey:@"userGender"];
-    //头像
     NSString *headImage = [obj objectForKey:@"userImg"];
     gender = (gender == nil) ? @"未设置" : gender;
     NSDictionary *dic = @{@"id":self.userId, @"name":userName, @"phone":_nameTF.text, @"pwd":_pwdTF.text, @"createdTime":[dateFormatter stringFromDate:createdData], @"headerImage":headImage, @"gender":gender};

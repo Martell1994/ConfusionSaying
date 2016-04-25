@@ -27,7 +27,7 @@
         _searchController.searchResultsUpdater = self;
         _searchController.dimsBackgroundDuringPresentation = NO;
         _searchController.hidesNavigationBarDuringPresentation = NO;
-        _searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
+        _searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, kWindowW, 44.0);
         self.tableView.tableHeaderView = self.searchController.searchBar;
     }
     return _searchController;
@@ -49,6 +49,19 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.searchController.searchBar setHidden:NO];
+    [self showProgressOn:self.view];
+    BmobQuery *bmobQuery = [BmobQuery new];
+    NSString *bql = [NSString stringWithFormat:@"select * from ZY_ArticleFavor where userId = '%@'",ZYDelegate.userId];
+    [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
+        if (result) {
+            [self hideProgressOn:self.view];
+            [self.articleArr removeAllObjects];
+            for (BmobObject *obj in result.resultsAry) {
+                [self.articleArr addObject:obj];
+            }
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -61,24 +74,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.title = @"收藏的文章";
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"article_bg"]];
     self.tableView.tableFooterView = [UIView new];
     [Factory addBackItemToVC:self];
     self.articleArr = [NSMutableArray new];
     self.searchList = [NSMutableArray new];
-    [self showProgressOn:self.view];
-    BmobQuery *bmobQuery = [BmobQuery new];
-    NSString *bql = [NSString stringWithFormat:@"select * from ZY_ArticleFavor where userId = '%@'",ZYDelegate.userId];
-    [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
-        if (result) {
-            [self hideProgressOn:self.view];
-            for (BmobObject *obj in result.resultsAry) {
-                [self.articleArr addObject:obj];
-            }
-            [self.tableView reloadData];
-        }
-    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -129,13 +131,12 @@
 
 #pragma mark - 实现UISearchResultsUpdating的required的必须方法
 -(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSLog(@"%d",self.searchController.active);
     if (self.searchList!= nil) {
         [self.searchList removeAllObjects];
     }
     //过滤数据
     for (BmobObject *obj in _articleArr) {
-        if ([[obj objectForKey:@"articleTitle"] containsString:[self.searchController.searchBar text]]) {
+        if ([[obj objectForKey:@"articleTitle"] containsString:[self.searchController.searchBar text]] || [[obj objectForKey:@"articleSource"] containsString:[self.searchController.searchBar text]]) {
             [self.searchList addObject:obj];
         }
     }
@@ -175,9 +176,5 @@
     }
 }
 
-//- (void)dealloc {
-//    NSLog(@"dealloc");
-//    self.searchController.searchBar.showsCancelButton = NO;
-//}
 
 @end

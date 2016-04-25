@@ -86,14 +86,28 @@
     return _backBtn;
 }
 
+- (UIButton *)shareBtn {
+    if (!_shareBtn) {
+        _shareBtn = [[UIButton alloc] init];
+        [self addSubview:_shareBtn];
+        [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.downloadBtn.mas_top);
+            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
+            make.size.mas_equalTo(CGSizeMake(25, 25));
+        }];
+        [_shareBtn setBackgroundImage:[UIImage imageNamed:@"icon_share"] forState:UIControlStateNormal];
+    }
+    return _shareBtn;
+}
+
 - (UIButton *)favorBtn {
     if (!_favorBtn) {
         _favorBtn = [UIButton new];
         [self addSubview:_favorBtn];
         [_favorBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.downloadBtn.mas_top);
-            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
-            make.size.mas_equalTo(CGSizeMake(25, 25));
+            make.top.mas_equalTo(30);
+            make.right.mas_equalTo(-13);
+            make.size.mas_equalTo(CGSizeMake(28, 28));
         }];
         [_favorBtn setBackgroundImage:[UIImage imageNamed:@"icon_like"] forState:UIControlStateNormal];
     }
@@ -161,26 +175,13 @@
     return _downloadBtn;
 }
 
-//- (UIButton *)shareBtn {
-//    if (!_shareBtn) {
-//        _shareBtn = [UIButton new];
-//        [self addSubview:_shareBtn];
-//        [_shareBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.mas_equalTo(self.downloadBtn.mas_top);
-//            make.left.mas_equalTo(self.downloadBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
-//            make.size.mas_equalTo(CGSizeMake(25, 25));
-//        }];
-//    }
-//    return _shareBtn;
-//}
-
 - (UIButton *)modeBtn {
     if (!_modeBtn) {
         _modeBtn = [UIButton new];
         [self addSubview:_modeBtn];
         [_modeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.downloadBtn.mas_top);
-            make.left.mas_equalTo(self.favorBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
+            make.left.mas_equalTo(self.shareBtn.mas_right).mas_equalTo((kWindowW - 100) / 4);
             make.size.mas_equalTo(CGSizeMake(25, 25));
         }];
         [_modeBtn setBackgroundImage:[UIImage imageNamed:@"icon_shuffleCycle"] forState:UIControlStateNormal];
@@ -212,7 +213,6 @@
             make.size.mas_equalTo(CGSizeMake(260, 3));
         }];
         _voiceSlider.tintColor = [UIColor whiteColor];
-        //        _voiceSlider.transform = CGAffineTransformMakeRotation(-M_PI_2);
         [_voiceSlider setThumbImage:[UIImage imageNamed:@"thumb"] forState:UIControlStateNormal];
     }
     return _voiceSlider;

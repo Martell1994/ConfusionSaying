@@ -28,7 +28,6 @@
     [_task resume];
 }
 
-
 #pragma mark - NSURLSessionDownloadDelegate
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location{
     //以MP3格式保存
@@ -41,12 +40,7 @@
 totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite{
     dispatch_async(dispatch_get_main_queue(), ^{
         self.progress = totalBytesWritten * 1.0 / totalBytesExpectedToWrite;
-//        NSLog(@"progress:%lf", self.progress);
-//        if(self.progress >= 1){
-//            NSLog(@"%f",self.progress);
             [self.delegate tellyouProgress:self.progress];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:MusicListViewController_download object:nil userInfo:@{@"progress":@(self.progress)}];
-//        }
     });
 }
 

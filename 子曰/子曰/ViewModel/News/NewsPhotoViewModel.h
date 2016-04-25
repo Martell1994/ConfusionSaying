@@ -16,5 +16,7 @@
 - (NSString *)setname;
 - (NSURL *)imgurlForRow:(NSInteger)row;
 - (NSString *)noteForRow:(NSInteger)row;
+- (NSString *)url;
+- (NSURL *)cover;
 - (void)refreshDataByUrlString:(NSString *)UrlString CompleteHandle:(void (^)(NSError *error))complete;
 @end

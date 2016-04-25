@@ -48,6 +48,19 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.searchController.searchBar setHidden:NO];
+    BmobQuery *bmobQuery = [BmobQuery new];
+    [self showProgressOn:self.view];
+    NSString *bql = [NSString stringWithFormat:@"select * from ZY_NewsFavor where userId = '%@'",ZYDelegate.userId];
+    [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
+        if (result) {
+            [self hideProgressOn:self.view];
+            [self.newsArr removeAllObjects];
+            for (BmobObject *obj in result.resultsAry) {
+                [self.newsArr addObject:obj];
+            }
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -61,23 +74,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"收藏的新闻";
+    self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"news_bg"]];
     self.tableView.tableFooterView = [UIView new];
     [Factory addBackItemToVC:self];
     self.newsArr = [NSMutableArray new];
     self.searchList = [NSMutableArray new];
-    BmobQuery *bmobQuery = [BmobQuery new];
-    [self showProgressOn:self.view];
-    NSString *bql = [NSString stringWithFormat:@"select * from ZY_NewsFavor where userId = '%@'",ZYDelegate.userId];
-    [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
-        if (result) {
-            [self hideProgressOn:self.view];
-            for (BmobObject *obj in result.resultsAry) {
-                [self.newsArr addObject:obj];
-            }
-            [self.tableView reloadData];
-        }
-    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -114,7 +116,7 @@
     } else {
         obj = self.newsArr[indexPath.row];
     }
-    NewsHtmlViewController *zhVC = [[NewsHtmlViewController alloc] initWithDocId:[obj objectForKey:@"newsId"]];
+    NewsHtmlViewController *zhVC = [[NewsHtmlViewController alloc] initWithDocId:[obj objectForKey:@"newsId"] withNewsImage:[NSURL URLWithString:[obj objectForKey:@"newsImage"]]];
     zhVC.docTitle = [obj objectForKey:@"newsTitle"];
     zhVC.imgStr = [obj objectForKey:@"newsImage"];
     [self.navigationController pushViewController:zhVC animated:YES];

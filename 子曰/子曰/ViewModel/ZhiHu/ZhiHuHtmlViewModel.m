@@ -30,8 +30,8 @@
 - (NSArray *)js{
     return self.zhHtmlModel.js;
 }
-- (NSURL *)shareUrl{
-    return [NSURL URLWithString:self.zhHtmlModel.share_url];
+- (NSString *)shareUrl{
+    return self.zhHtmlModel.share_url;
 }
 - (NSString *)title{
     return self.zhHtmlModel.title;

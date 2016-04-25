@@ -15,12 +15,13 @@
 
 #define PVSI [PlayView sharedInstance]
 
-@interface PlayViewController ()<DownloadMusicNetManagerDelegate>
+@interface PlayViewController ()<DownloadMusicNetManagerDelegate, UMSocialUIDelegate> {
+    MPMediaItemArtwork *_artWork;
+}
 @property (nonatomic, copy) NSMutableArray *downloadArr;
 @property (nonatomic, strong) NSMutableArray *favorArr;
 @property (nonatomic, assign) BOOL likeOrNot;
 @property (nonatomic, assign) BOOL downloadOrNot;
-@property (nonatomic, assign) BOOL mode;//0代表顺序1代表单曲
 @property (nonatomic, strong) BmobObject *fObj;
 @property (nonatomic, strong) DownloadMusicNetManager *dlmNetManager;
 @property (nonatomic, assign) BOOL isPlay;//歌曲是否在播放
@@ -60,8 +61,7 @@
     [super viewWillAppear:animated];
     BmobQuery *bmobQuery = [BmobQuery new];
     self.favorArr = [NSMutableArray new];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    NSString *bql = [NSString stringWithFormat:@"select * from ZY_SongFavor where userId = '%@'",delegate.userId];
+    NSString *bql = [NSString stringWithFormat:@"select * from ZY_SongFavor where userId = '%@'",ZYDelegate.userId];
     [bmobQuery queryInBackgroundWithBQL:bql block:^(BQLQueryResult *result, NSError *error) {
         if (result) {
             for (BmobObject *obj in result.resultsAry) {
@@ -75,8 +75,8 @@
     //进入页面的时候让timer
     [PVSI invalidatePlayingTimer];
     [PVSI startPlayingTimer];
-    
     [self showBackBtn];
+    [self showShareBtn];
     [self favorBtnTap];
     [self downloadBtnTap];
     [self tapMusic];
@@ -84,7 +84,6 @@
     //监听歌曲是否播放完成
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(songPlayDidEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
-    
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
 }
@@ -156,14 +155,14 @@
     }
     [PVSI.modeBtn bk_removeEventHandlersForControlEvents:UIControlEventTouchUpInside];
     [PVSI.modeBtn bk_addEventHandler:^(id sender) {
-        if (self.mode) {
+        if (ZYDelegate.playType != 0) {
             [PVSI.modeBtn setBackgroundImage:[UIImage imageNamed:@"icon_shuffleCycle"] forState:UIControlStateNormal];
             [self showMsg:@"顺序播放"];
-            self.mode = NO;
+            ZYDelegate.playType = 0;
         } else {
             [PVSI.modeBtn setBackgroundImage:[UIImage imageNamed:@"icon_singleCycle"] forState:UIControlStateNormal];
             [self showMsg:@"单曲循环"];
-            self.mode = YES;
+            ZYDelegate.playType = 1;
         }
     } forControlEvents:UIControlEventTouchUpInside];
     PVSI.listBtn.hidden = NO;
@@ -175,7 +174,6 @@
     self.maxVolume = 5.0;
     PVSI.voiceSlider.value = PVSI.player.volume / self.maxVolume;
     PVSI.voiceSlider.hidden = YES;
-    
 }
 
 //滑动slider控件
@@ -216,30 +214,46 @@
 }
 
 - (void)songPlayDidEnd:(NSNotification *)notification{
-    NSLog(@"end");
-    //自动跳到下一首
-    if (PVSI.musicListType == downloadMusicType) {//下载的音乐
-        PVSI.playingList = self.downloadArr;
-        NSInteger nextIndex = [self indexOfNextSong:[self getIndexOfDSong] WithCount:PVSI.playingList.count];
-        PVSI.musicDic = PVSI.playingList[nextIndex];
-        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"mp3");
-        PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
-    } else {
-        if (PVSI.isNetMusicList) {//普通网络音乐
-            PVSI.songId = [self indexOfNextSong:PVSI.songId WithCount:PVSI.playingList.count];
-            [self dataForNetworkMusic];
-        } else {//喜爱的网络音乐
-            PVSI.playingList = self.favorArr;
-            NSInteger nextIndex = [self indexOfNextSong:[self getIndexOfFSong] WithCount:PVSI.playingList.count];
-            [self favorMTapWith:nextIndex];
+    if (ZYDelegate.playType == 0) {//顺序播放
+        //自动跳到下一首
+        if (PVSI.musicListType == downloadMusicType) {//下载的音乐
+            PVSI.playingList = self.downloadArr;
+            NSInteger nextIndex = [self indexOfNextSong:[self getIndexOfDSong] WithCount:PVSI.playingList.count];
+            PVSI.musicDic = PVSI.playingList[nextIndex];
+            NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"],@"mp3");
+            PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
+        } else {
+            if (PVSI.isNetMusicList) {//普通网络音乐
+                PVSI.songId = [self indexOfNextSong:PVSI.songId WithCount:PVSI.playingList.count];
+                [self dataForNetworkMusic];
+            } else {//喜爱的网络音乐
+                PVSI.playingList = self.favorArr;
+                NSInteger nextIndex = [self indexOfNextSong:[self getIndexOfFSong] WithCount:PVSI.playingList.count];
+                [self favorMTapWith:nextIndex];
+            }
         }
+        [self tabMusicWith:PVSI.nextBtn];
+    } else {//单曲循环
+        if (PVSI.musicListType == downloadMusicType) {//下载的音乐
+            NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"],@"mp3");
+            PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
+        } else {
+            if (PVSI.isNetMusicList) {//普通网络音乐
+                [self dataForNetworkMusic];
+            } else {//喜爱的网络音乐
+                PVSI.playingList = self.favorArr;
+                [self favorMTapWith:[self getIndexOfFSong]];
+            }
+        }
+        [self tabMusicWith:PVSI.playBtn];
+        
     }
-    [self tabMusicWith:PVSI.nextBtn];
 }
 
 //背景和专辑图片准备
 - (void)arrangeImgV {
-    NSString *imageString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Image"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"png");
+    //NSString *imageString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Image"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"png");
+    NSString *imageString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Image"],PVSI.musicDic[@"song"],@"png");
     //背景图片
     [PVSI.bgImgV setImage:[UIImage imageWithContentsOfFile:imageString]];
     PVSI.albumCoverMaskImgV.hidden = NO;
@@ -260,6 +274,23 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     } forControlEvents:UIControlEventTouchUpInside];
 }
+
+//分享按钮
+- (void)showShareBtn {
+    //移除观察者
+    [PVSI.shareBtn bk_removeEventHandlersForControlEvents:UIControlEventTouchUpInside];
+    [PVSI.shareBtn bk_addEventHandler:^(id sender) {
+        //友盟分享调用
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:nil
+                                          shareText:[NSString stringWithFormat:@"%@-%@,%@",PVSI.musicDic[@"song"],PVSI.musicDic[@"singer"],PVSI.musicDic[@"url"]]
+                                         shareImage:[UIImage imageNamed:PVSI.musicDic[@"cover"]]
+                                    shareToSnsNames:@[UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                           delegate:self];
+        [[UMSocialData defaultData].urlResource setResourceType:UMSocialUrlResourceTypeMusic url:PVSI.musicDic[@"url"]];
+    } forControlEvents:UIControlEventTouchUpInside];
+}
+
 
 //点击收藏按钮
 - (void)favorBtnTap {
@@ -318,13 +349,13 @@
     [PVSI.downloadBtn bk_addEventHandler:^(id sender) {
         if (ZYDelegate.downloadUnderWWAN || ZYDelegate.isOnLine == 2) {
             PVSI.downloadBtn.enabled = NO;
-            [self showSuccessMsg:@"正在下载"];
+            [self showMsg:@"正在下载"];
             [self.dlmNetManager methodDownloadURL:[NSURL URLWithString:PVSI.musicDic[@"url"]]];
             //图片以png格式保存
             NSString *rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Image"];
             BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
             if (PNGisSuccess) {
-                NSString *filePath = piece_together(rootPath, PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"png");
+                NSString *filePath = piece_together(rootPath, PVSI.musicDic[@"song"], @"png");
                 NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:PVSI.coverImageURL]];
                 [imageData writeToFile:filePath atomically:YES];
                 NSLog(@"下载图片成功");
@@ -359,8 +390,6 @@
     } forControlEvents:UIControlEventValueChanged];
     //弹出音量
     [PVSI.listBtn bk_addEventHandler:^(id sender) {
-//        PlayListViewController *listVC = [[PlayListViewController alloc]init];
-//        [self presentViewController:listVC animated:YES completion:nil];
         if (PVSI.voiceSlider.hidden) {
             PVSI.voiceSlider.hidden = NO;
         } else {
@@ -384,7 +413,7 @@
         PVSI.playingList = self.downloadArr;
         NSInteger prevIndex = [self indexOfPrevSong:[self getIndexOfDSong] WithCount:self.downloadArr.count];
         PVSI.musicDic = self.downloadArr[prevIndex];
-        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"mp3");
+        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"],@"mp3");
         PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
     } else {
         if (PVSI.isNetMusicList) {//网络音乐
@@ -404,7 +433,7 @@
         PVSI.playingList = self.downloadArr;
         NSInteger nextIndex = [self indexOfNextSong:[self getIndexOfDSong] WithCount:PVSI.playingList.count];
         PVSI.musicDic = PVSI.playingList[nextIndex];
-        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"mp3");
+        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"], @"mp3");
         PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
     } else {
         if (PVSI.isNetMusicList) {//普通网络音乐
@@ -483,9 +512,9 @@
         PVSI.player = [AVPlayer playerWithURL:[NSURL URLWithString:[nextS objectForKey:@"songUrl"]]];
         PVSI.coverImageURL = [nextS objectForKey:@"songCover"];
     } else {//下载的音乐
-        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"], PVSI.musicDic[@"album"], @"mp3");
+        NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], PVSI.musicDic[@"song"],@"mp3");
         PVSI.player = [AVPlayer playerWithURL:[NSURL fileURLWithPath:musicString]];
-        PVSI.coverImageURL = nil;
+        //        PVSI.coverImageURL = nil;
     }
 }
 
@@ -531,11 +560,17 @@
 #pragma mark - 锁屏显歌词
 // 在锁屏界面显示歌曲信息
 - (void)showInfoInLockedScreen{
-    MPMediaItemArtwork *artWork = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:PVSI.coverImageURL]]]];
+    NSLog(@"1:%@,2:%@",PVSI.coverImageURL,PVSI.musicDic[@"cover"]);
+    //    http://fdfs.xmcdn.com/group13/M09/0B/59/wKgDXVbNQg2SYh1cAAKX6bF2ZbU798_mobile_large.jpg
+    if (PVSI.musicListType == downloadMusicType) {
+        _artWork = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:PVSI.musicDic[@"cover"]]]]];
+    } else {
+        _artWork = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:PVSI.coverImageURL]]]];
+    }
     NSDictionary *info = @{
                            MPMediaItemPropertyTitle:PVSI.musicDic[@"song"],
                            MPMediaItemPropertyArtist:PVSI.musicDic[@"singer"],
-                           MPMediaItemPropertyArtwork:artWork,
+                           MPMediaItemPropertyArtwork:_artWork,
                            MPNowPlayingInfoPropertyElapsedPlaybackTime:[NSNumber numberWithDouble:CMTimeGetSeconds(PVSI.player.currentTime)],
                            MPNowPlayingInfoPropertyPlaybackRate:[NSNumber numberWithFloat:1.0],
                            MPMediaItemPropertyPlaybackDuration:[NSNumber numberWithFloat:[self timeByInterval:PVSI.musicDic[@"duration"]]]
@@ -551,7 +586,7 @@
 }
 - (void)tellyouLocation:(NSURL *)location{
     //音乐以MP3格式保存
-    NSString *MP3savaFileName = [[[PVSI.musicDic[@"song"] stringByAppendingString:@"-"] stringByAppendingString:PVSI.musicDic[@"album"]] stringByAppendingPathExtension:@"mp3"];
+    NSString *MP3savaFileName = [PVSI.musicDic[@"song"] stringByAppendingPathExtension:@"mp3"];
     NSString *MP3rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Music"];
     BOOL MP3isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:MP3rootPath withIntermediateDirectories:YES attributes:nil error:nil];
     if (MP3isSuccess) {
@@ -561,13 +596,14 @@
 }
 
 - (void)receiveProgress {
-    NSLog(@"完成下载啦");
+    [self showSuccessMsg:@"下载完成"];
     [PVSI.downloadBtn setBackgroundImage:[UIImage imageNamed:@"icon_downloaded"] forState:UIControlStateDisabled];
     NSString *songDownloadPlistPath = [DirectoriesPath stringByAppendingPathComponent:@"songDownload.plist"];
     NSMutableArray *array = [NSMutableArray arrayWithContentsOfFile:songDownloadPlistPath];
     NSDictionary *dic = @{@"song":PVSI.musicDic[@"song"],@"duration":PVSI.musicDic[@"duration"],@"singer":PVSI.musicDic[@"singer"],@"album":PVSI.musicDic[@"album"],@"time":[self dateForStandardYMdHmsS],@"url": PVSI.musicDic[@"url"],@"cover":PVSI.coverImageURL};
     [array addObject:dic];
     [array writeToFile:songDownloadPlistPath atomically:YES];
+    [self.downloadArr addObject:dic];
 }
 
 @end

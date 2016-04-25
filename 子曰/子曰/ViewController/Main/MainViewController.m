@@ -268,47 +268,7 @@
 }
 
 #pragma mark - UIScrollView
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-//    CGFloat offSetY = scrollView.contentOffset.y;
-////    if (-offSetY > 0 && -offSetY < 32) {
-////        self.arcView.iv1.image = [UIImage imageNamed:@"position"];
-////    }
-//    
-//    if (-offSetY <= 64 && -offSetY >= 32) {
-////文字
-//        self.arcView.lb.text = @"下拉刷新😁";
-//        self.arcView.lb.alpha = (-offSetY - 32) / 32.0;
-////箭头旋转
-//        self.arcView.iv1.image = [UIImage imageNamed:@"arrow"];
-//        self.arcView.iv1.alpha = (-offSetY - 32) / 32.0;
-//        //计算停止时的旋转角度
-//        CGAffineTransform transform = CGAffineTransformMakeRotation(M_PI * (-offSetY - 32) / 32.0);
-//        [UIView animateWithDuration:0.01 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-//            self.arcView.iv1.transform = transform;
-//        } completion:^(BOOL finished) {
-//        }];
-//        
-////圆弧进度条
-////        self.arcView.progress = (-offSetY - 32) / 32.0;
-////        [self.arcView setNeedsDisplay];
-//    }
-//    if (-offSetY > 64) {//开始刷新数据
-//        self.arcView.lb.text = @"释放刷新😫";
-////        self.arcView.progress = 1;
-////        [self.arcView setNeedsDisplay];
-//        
-//        CGPoint offset = scrollView.contentOffset;
-//        NSLog(@"%f",offset.y);
-////        [scrollView setContentOffset:CGPointMake(0, -64) animated:YES];
-////        让scrollview停在64的位置不能下拉
-////        (scrollView.contentOffset.y > 0) ? offset.y-- : offset.y++;
-////        [scrollView setContentOffset:CGPointMake(0, -64) animated:NO];
-//    }
-//}
-//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-//    CGPoint p = (CGPoint)targetContentOffset;
-//    NSLog(@"end:%f",velocity.y);
-//}
+
 #pragma mark - zhihuMenu
 
 - (void)addEventMenuSV{
@@ -356,7 +316,7 @@
 
 #pragma mark - todayHotNews
 
-- (void)showTodayHotNewsContent{
+- (void)addTodayHotNewsContent{
     for (int i = 0; i < 3; i++) {
         UIImageView *rankIV = [[UIImageView alloc]init];
         [rankIV sd_setImageWithURL:[self.zhVM imageTopForRow:i] placeholderImage:[UIImage imageNamed:@"loading"]];
@@ -426,7 +386,7 @@
     [self.musicView addSubview:musicNameLb];
 }
 
-- (void)showMusicViewContent{
+- (void)addMusicViewContent{
     for (int i = 0; i < 3; i++) {
         UIImageView *rankIV = [[UIImageView alloc]init];
         [rankIV sd_setImageWithURL:[self.musicCategoryVM iconURLForRow:i] placeholderImage:[UIImage imageNamed:@"cell_bg_noData"]];
@@ -474,7 +434,7 @@
     [self.newsView addSubview:newsNameLb];
 }
 
-- (void)showNewsViewContent{
+- (void)addNewsViewContent{
     for (int i = 0; i < 3; i++) {
         UIImageView *rankIV = [[UIImageView alloc]init];
         [rankIV sd_setImageWithURL:[NSURL URLWithString:[self.newsVM imgsrcForRow:i]] placeholderImage:[UIImage imageNamed:@"NewsCell_default"]];
@@ -487,8 +447,9 @@
         [self.newsView addSubview:rankBtn];
         [rankBtn bk_addEventHandler:^(UIButton *sender) {
             self.hidesBottomBarWhenPushed = YES;
-            NewsHtmlViewController *nhVC = [[NewsHtmlViewController alloc]initWithDocId:[self.newsVM docidForRow:i]];
-            nhVC.navigationItem.title = [self.newsVM titleForRow:sender.tag];
+            NewsHtmlViewController *nhVC = [[NewsHtmlViewController alloc]initWithDocId:[self.newsVM docidForRow:i] withNewsImage:[self.newsVM imgsrcTopForRow:i]];
+            nhVC.docTitle = [self.newsVM titleForRow:i];
+            nhVC.imgStr = [self.newsVM imgsrcForRow:i];
             [self.navigationController pushViewController:nhVC animated:YES];
             self.hidesBottomBarWhenPushed = NO;
         } forControlEvents:UIControlEventTouchUpInside];
@@ -550,24 +511,24 @@
         if (error) {
             [self showErrorMsg:error.localizedDescription];
         }else{
-            [self showTodayHotNewsContent];
+            [self addTodayHotNewsContent];
         }
     }];
     [self showMusicViewTop];
+    
     [self.musicCategoryVM refreshDataCompletionHandle:^(NSError *error) {
         if (error) {
             [self showErrorMsg:error.localizedDescription];
         } else {
-            [self showMusicViewContent];
+            [self addMusicViewContent];
         }
     }];
-    
     [self showNewsViewTop];
     [self.newsVM refreshDataCompleteHandle:^(NSError *error) {
         if (error) {
             [self showErrorMsg:error.localizedDescription];
         }else{
-            [self showNewsViewContent];
+            [self addNewsViewContent];
         }
     }];
     

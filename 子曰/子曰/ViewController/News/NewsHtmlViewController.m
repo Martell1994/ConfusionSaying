@@ -9,18 +9,22 @@
 #import "NewsHtmlViewController.h"
 #import "NewsHtmlViewModel.h"
 
-@interface NewsHtmlViewController ()<UIWebViewDelegate>
+@interface NewsHtmlViewController ()<UIWebViewDelegate, UMSocialUIDelegate>
 @property (nonatomic, strong) NewsHtmlViewModel *nhVM;
 @property (nonatomic, strong) UIWebView *webView;
-@property (nonatomic, assign) BOOL favorOrNot;
 @property (nonatomic, strong) AppDelegate *delegate;
+@property (nonatomic, strong) UIBarButtonItem *favorButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *shareButtonItem;
+@property (nonatomic, strong) NSString *docId;
+@property (nonatomic, strong) NSURL *newsImage;
 @end
 
 @implementation NewsHtmlViewController
 
-- (instancetype)initWithDocId:(NSString *)docId{
+- (instancetype)initWithDocId:(NSString *)docId withNewsImage:(NSURL *)newsImage{
     if (self = [super init]) {
         self.docId = docId;
+        self.newsImage = newsImage;
     }
     return self;
 }
@@ -67,21 +71,35 @@
     [self.nhVM refreshDataByDocId:self.docId CompleteHandle:^(NSError *error) {
         [self showInWebView];
     }];
+    [Factory addBackItemToVC:self];
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    self.shareButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+        //友盟分享调用
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:nil
+                                          shareText:[NSString stringWithFormat:@"%@,%@",[self.nhVM title],[self.nhVM sourceUrl]]
+                                         shareImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.newsImage]]
+                                    shareToSnsNames:@[UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                           delegate:self];
+        [UMSocialData defaultData].extConfig.wechatSessionData.url = [self.nhVM sourceUrl];
+        [UMSocialData defaultData].extConfig.wechatTimelineData.url = [self.nhVM sourceUrl];
+    }];
+    if (delegate.loginOrNot) {
+        [self favorTap];
+    } else {
+        self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+            [self showMsg:@"请先登录"];
+        }];
+        self.navigationItem.rightBarButtonItems = @[self.favorButtonItem,self.shareButtonItem];
+    }
     for (id subview in self.webView.subviews){
         if ([[subview class] isSubclassOfClass:[UIScrollView class]]) {
             ((UIScrollView *)subview).bounces = NO;
         }
     }
-    [Factory addBackItemToVC:self];
-    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (delegate.loginOrNot) {
-        [self favorTap];
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
-            [self showMsg:@"请先登录"];
-        }];
-    }
 }
+
 - (void)favorTap {
     BmobQuery *bquery = [BmobQuery new];
     NSString *selectSql = [NSString stringWithFormat:@"select *from ZY_NewsFavor where newsId = '%@' and userId = '%@'",self.docId, self.delegate.userId];
@@ -90,45 +108,40 @@
             NSLog(@"收藏新闻时查询数据失败，原因为%@",error);
         } else {
             if (result.resultsAry.count) {
-                _favorOrNot = YES;
                 BmobObject *obj = (BmobObject *)result.resultsAry[0];
-                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collected"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+                self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collected"] style:UIBarButtonItemStylePlain handler:^(id sender) {
                     BmobObject *cancelObject = [BmobObject objectWithoutDatatWithClassName:@"ZY_NewsFavor" objectId:[obj objectId]];
                     [cancelObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
                         if (isSuccessful) {
                             [self showMsg:@"取消收藏"];
-                            self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collect"];
-                            _favorOrNot = NO;
                             [self favorTap];
                         } else if (error) {
-                            NSLog(@"取消收藏新闻时失败，原因为%@",error);
+                            [self showErrorMsg:[NSString stringWithFormat:@"取消收藏失败，原因是:%@",error.userInfo]];
                         } else{
-                            NSLog(@"取消收藏新闻时失败，原因未知");
+                            [self showErrorMsg:@"取消收藏失败，原因未知"];
+                        }
+                    }];
+                }];
+            }else {
+                self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+                    BmobObject *newsFavor = [[BmobObject alloc] initWithClassName:@"ZY_NewsFavor"];
+                    [newsFavor setObject:self.delegate.userId forKey:@"userId"];
+                    [newsFavor setObject:self.docTitle forKey:@"newsTitle"];
+                    [newsFavor setObject:self.docId forKey:@"newsId"];
+                    [newsFavor setObject:self.imgStr forKey:@"newsImage"];
+                    [newsFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                        if (isSuccessful) {
+                            [self showMsg:@"收藏成功"];
+                            [self favorTap];
+                        } else {
+                            [self showErrorMsg:[NSString stringWithFormat:@"新闻收藏失败，原因是:%@",error.userInfo]];
                         }
                     }];
                 }];
             }
+            self.navigationItem.rightBarButtonItems = @[self.favorButtonItem,self.shareButtonItem];
         }
     }];
-    if (_favorOrNot == NO) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
-            BmobObject *newsFavor = [[BmobObject alloc] initWithClassName:@"ZY_NewsFavor"];
-            [newsFavor setObject:self.delegate.userId forKey:@"userId"];
-            [newsFavor setObject:self.docTitle forKey:@"newsTitle"];
-            [newsFavor setObject:self.docId forKey:@"newsId"];
-            [newsFavor setObject:self.imgStr forKey:@"newsImage"];
-            [newsFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-                if (isSuccessful) {
-                    [self showMsg:@"收藏成功"];
-                    self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collected"];
-                    _favorOrNot = YES;
-                    [self favorTap];
-                } else {
-                    NSLog(@"新闻收藏失败，原因是：error:%@",error);
-                }
-            }];
-        }];
-    }
 }
 
 #pragma mark - 拼接html语言

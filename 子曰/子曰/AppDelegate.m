@@ -8,6 +8,9 @@
 
 #import "AppDelegate.h"
 #import "AppDelegate+Category.h"
+#import "UMSocial.h"
+#import "UMSocialSinaSSOHandler.h"
+#import "UMSocialWechatHandler.h"
 
 @interface AppDelegate ()
 @property (nonatomic, copy) NSString *songDownloadPlistPath;
@@ -43,6 +46,12 @@
     if (![fileManager fileExistsAtPath:self.settingPlistPath]) {
         [settingDic writeToFile:self.settingPlistPath atomically:YES];
     }
+    
+    [UMSocialData setAppKey:UMSocialKey];
+    //sina
+    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"2821545602" secret:@"7827a0c1b8e0b68c7bfe5f165f80bbd2" RedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
+    //wechat
+    [UMSocialWechatHandler setWXAppId:@"wx26696b42a242191a" appSecret:@"503cf0d15ee304da52459080db06b214" url:@"http://www.umeng.com/social"];
     return YES;
 }
 
@@ -66,6 +75,14 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    BOOL result = [UMSocialSnsService handleOpenURL:url];
+    if (result == FALSE) {
+        //调用其他SDK，例如支付宝SDK等
+    }
+    return result;
 }
 
 @end

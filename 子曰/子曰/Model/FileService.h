@@ -10,7 +10,7 @@
 //清除SDWebImage的缓存
 @interface FileService : NSObject
 
-+(float)folderSizeAtPath:(NSString *)path;
-+(void)clearCache:(NSString *)path;
++ (float)folderSizeAtPath:(NSString *)path;
++ (void)clearCache:(NSString *)path;
 
 @end

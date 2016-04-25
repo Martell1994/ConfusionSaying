@@ -35,7 +35,6 @@
                 _orderLb.textColor = [UIColor blackColor];
             }
         }];
-        
         [self.orderLb mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.mas_equalTo(0);
             make.left.mas_equalTo(0);

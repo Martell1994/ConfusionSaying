@@ -9,6 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface NewsPhotoViewController : UIViewController
-- (instancetype)initWithUrlString:(NSString *)urlString;
-@property (nonatomic,strong) NSString *urlString;
+- (instancetype)initWithUrlString:(NSString *)urlString withNewsTitle:(NSString *)newsTitle;
 @end

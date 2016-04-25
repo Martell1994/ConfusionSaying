@@ -192,7 +192,7 @@
 
 - (void)tellyouLocation:(NSURL *)location{
     //音乐以MP3格式保存
-    NSString *MP3savaFileName = [[[self.titleLb.text stringByAppendingString:@"-"] stringByAppendingString:self.album] stringByAppendingPathExtension:@"mp3"];
+    NSString *MP3savaFileName = [self.titleLb.text stringByAppendingPathExtension:@"mp3"];
     NSString *MP3rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Music"];
     BOOL MP3isSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:MP3rootPath withIntermediateDirectories:YES attributes:nil error:nil];
     if (MP3isSuccess) {

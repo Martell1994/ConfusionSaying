@@ -186,7 +186,7 @@
                 NSString *rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Image"];
                 BOOL PNGisSuccess = [[NSFileManager defaultManager] createDirectoryAtPath:rootPath withIntermediateDirectories:YES attributes:nil error:nil];
                 if (PNGisSuccess) {
-                    NSString *filePath = piece_together(rootPath, cell.titleLb.text, self.navigationItem.title, @"png");
+                    NSString *filePath = piece_together(rootPath, cell.titleLb.text, @"png");
                     NSData *imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:[self.musicVM largeCoverURLForRow:indexPath.row]]];
                     [imageData writeToFile:filePath atomically:YES];
                     NSLog(@"下载图片成功");

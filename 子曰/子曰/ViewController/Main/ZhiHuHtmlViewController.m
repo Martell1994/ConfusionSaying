@@ -10,13 +10,14 @@
 #import "ZhiHuHtmlViewModel.h"
 #import "WebImgScrollView.h"
 
-@interface ZhiHuHtmlViewController () <UIWebViewDelegate>
+@interface ZhiHuHtmlViewController () <UIWebViewDelegate, UMSocialUIDelegate>
 @property (nonatomic, strong) ZhiHuHtmlViewModel *zhVM;
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) UIImageView *topIV;
 @property (nonatomic, strong) NSString *htmlStr;
-@property (nonatomic, assign) BOOL favorOrNot;
 @property (nonatomic, strong) AppDelegate *delegate;
+@property (nonatomic, strong) UIBarButtonItem *favorButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *shareButtonItem;
 
 /** 链接正确，但是返回的body无内容时弹出提示视图 */
 @property (nonatomic, strong) UIImageView *bodyNilIV;
@@ -77,6 +78,7 @@
     [super viewWillAppear:animated];
     [self.navigationController.navigationBar setTranslucent:NO];
 }
+
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.navigationController.navigationBar setTranslucent:YES];
@@ -90,16 +92,29 @@
     } else {
         [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navi_white"] forBarMetrics:UIBarMetricsDefault];
     }
-    if (self.delegate.loginOrNot) {
+    self.shareButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+        //友盟分享调用
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:nil
+                                          shareText:[NSString stringWithFormat:@"%@,%@",[self.zhVM title],[self.zhVM shareUrl]]
+                                         shareImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[self.zhVM image]]]
+                                    shareToSnsNames:@[UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                           delegate:self];
+        [UMSocialData defaultData].extConfig.wechatSessionData.url = [self.zhVM shareUrl];
+        [UMSocialData defaultData].extConfig.wechatTimelineData.url = [self.zhVM shareUrl];
+    }];
+    if (self.delegate.loginOrNot) {//登录状态下去判断收藏状态
         [self favorTap];
-    } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+    }else {
+        self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
             [self showMsg:@"请先登录"];
         }];
+        self.navigationItem.rightBarButtonItems = @[self.favorButtonItem,self.shareButtonItem];
     }
+    
     [self.zhVM refreshDataByStoryId:self.storyId CompleteHandle:^(NSError *error) {
         if ([self.zhVM body] == nil) {
-            [self.webView loadRequest:[NSURLRequest requestWithURL:[self.zhVM shareUrl]]];
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[self.zhVM shareUrl]]]];
         }else{
             self.htmlStr = [NSString stringWithFormat:@"<html><head><link rel=\"stylesheet\" href=%@></head><body>%@</body></html>",self.zhVM.css[0],self.zhVM.body];
             [self.webView loadHTMLString:self.htmlStr baseURL:nil];
@@ -132,46 +147,40 @@
             NSLog(@"收藏文章时查询数据失败，原因为%@",error);
         } else {
             if (result.resultsAry.count) {
-                _favorOrNot = YES;
                 BmobObject *obj = (BmobObject *)result.resultsAry[0];
-                self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collected"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+                self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collected"] style:UIBarButtonItemStylePlain handler:^(id sender) {
                     BmobObject *cancelObject = [BmobObject objectWithoutDatatWithClassName:@"ZY_ArticleFavor" objectId:[obj objectId]];
                     [cancelObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
                         if (isSuccessful) {
                             [self showMsg:@"取消收藏"];
-                            self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collect"];
-                            _favorOrNot = NO;
                             [self favorTap];
                         } else if (error) {
-                            NSLog(@"取消收藏文章时失败，原因为%@",error);
+                            [self showErrorMsg:[NSString stringWithFormat:@"取消收藏失败，%@",error.userInfo]];
                         } else{
-                            NSLog(@"取消收藏文章时失败，原因未知");
+                            [self showErrorMsg:@"取消收藏失败，原因不明"];
                         }
                     }];
-                    
+                }];
+            }else {
+                self.favorButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+                    BmobObject *articleFavor = [[BmobObject alloc] initWithClassName:@"ZY_ArticleFavor"];
+                    [articleFavor setObject:self.delegate.userId forKey:@"userId"];
+                    [articleFavor setObject:self.storyTitle forKey:@"articleTitle"];
+                    [articleFavor setObject:self.storySource forKey:@"articleSource"];
+                    [articleFavor setObject:storyId forKey:@"articleId"];
+                    [articleFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                        if (isSuccessful) {
+                            [self showMsg:@"收藏成功"];
+                            [self favorTap];
+                        } else {
+                            [self showErrorMsg:[NSString stringWithFormat:@"文章收藏失败，%@",error.userInfo]];
+                        }
+                    }];
                 }];
             }
+            self.navigationItem.rightBarButtonItems = @[self.favorButtonItem,self.shareButtonItem];
         }
     }];
-    if (_favorOrNot == NO) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"collect"] style:UIBarButtonItemStylePlain handler:^(id sender) {
-            BmobObject *articleFavor = [[BmobObject alloc] initWithClassName:@"ZY_ArticleFavor"];
-            [articleFavor setObject:self.delegate.userId forKey:@"userId"];
-            [articleFavor setObject:self.storyTitle forKey:@"articleTitle"];
-            [articleFavor setObject:self.storySource forKey:@"articleSource"];
-            [articleFavor setObject:storyId forKey:@"articleId"];
-            [articleFavor saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-                if (isSuccessful) {
-                    [self showMsg:@"收藏成功"];
-                    self.navigationItem.rightBarButtonItem.image = [UIImage imageNamed:@"collected"];
-                    _favorOrNot = YES;
-                    [self favorTap];
-                } else {
-                    NSLog(@"文章收藏失败，原因是：error:%@",error);
-                }
-            }];
-        }];
-    }
 }
 
 
@@ -211,7 +220,18 @@
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [self  showErrorMsg:@"出错啦!"];
+    //    [self showErrorMsg:@"出错啦!"];
+}
+
+#pragma mark - UMSocialDelegate
+//实现回调方法（可选）：
+-(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response {
+    //根据`responseCode`得到发送结果,如果分享成功
+    if(response.responseCode == UMSResponseCodeSuccess)
+    {
+        //得到分享到的微博平台名
+        NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
+    }
 }
 
 @end

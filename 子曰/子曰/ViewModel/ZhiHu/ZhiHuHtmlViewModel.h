@@ -20,7 +20,7 @@
 - (NSURL *)image;
 - (NSString *)imageSource;
 - (NSArray *)js;
-- (NSURL *)shareUrl;
+- (NSString *)shareUrl;
 - (NSString *)title;
 - (NSInteger)type;
 

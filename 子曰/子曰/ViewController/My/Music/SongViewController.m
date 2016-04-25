@@ -64,7 +64,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = self.songType ? @"下载的音乐" : @"喜爱的音乐";
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     [Factory addBackItemToVC:self];
     self.tableView.tableFooterView = [UIView new];
     self.tableView.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"downloadTVC_bg"]];
@@ -113,7 +113,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MusicCell *cell = [[MusicCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     if (self.songType == downloadedSongType) {
-        NSDictionary *songDict = [NSDictionary new];
+        NSDictionary *songDict = [NSDictionary dictionary];
         if (self.searchController.active) {
             songDict = self.searchList[indexPath.row];
         } else {
@@ -150,10 +150,10 @@
     MusicCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     PlayViewController *vc = [[PlayViewController alloc] init];
     NSString *rootPath = [DirectoriesPath stringByAppendingPathComponent:@"Music"];
-    NSString *musicString = [[[[rootPath stringByAppendingPathComponent:cell.songLb.text] stringByAppendingString:@"-"] stringByAppendingString:cell.albumLb.text] stringByAppendingPathExtension:@"mp3"];
+    NSString *musicString = [[rootPath stringByAppendingPathComponent:cell.songLb.text] stringByAppendingPathExtension:@"mp3"];
     if (self.songType == downloadedSongType) {
         self.musicUrl = [NSURL fileURLWithPath:musicString];
-        NSDictionary *dic = [NSDictionary new];
+        NSDictionary *dic = [NSDictionary dictionary];
         if (self.searchController.active) {
             dic = self.searchList[indexPath.row];
         } else {
@@ -203,13 +203,13 @@
     //过滤数据
     if (self.songType == favorSongType) {
         for (BmobObject *obj in _musicFArr) {
-            if ([[obj objectForKey:@"songName"] containsString:[self.searchController.searchBar text]]) {
+            if ([[obj objectForKey:@"songName"] containsString:[self.searchController.searchBar text]] || [[obj objectForKey:@"songAlbum"] containsString:[self.searchController.searchBar text]] || [[obj objectForKey:@"songSinger"] containsString:[self.searchController.searchBar text]]) {
                 [self.searchList addObject:obj];
             }
         }
     } else {
         for (NSDictionary *dic in _musicDArr) {
-            if ([[dic objectForKey:@"song"] containsString:[self.searchController.searchBar text]]) {
+            if ([[dic objectForKey:@"song"] containsString:[self.searchController.searchBar text]] || [[dic objectForKey:@"singer"] containsString:[self.searchController.searchBar text]] || [[dic objectForKey:@"album"] containsString:[self.searchController.searchBar text]]) {
                 [self.searchList addObject:dic];
             }
         }
@@ -251,8 +251,8 @@
             }];
             UIAlertAction *deleteDownloadAction = [UIAlertAction actionWithTitle:@"本地音乐同时删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 //同时删除图片和音乐资源
-                NSString *imageString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Image"], self.musicDArr[indexPath.row][@"song"], self.musicDArr[indexPath.row][@"album"], @"png");
-                NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], self.musicDArr[indexPath.row][@"song"], self.musicDArr[indexPath.row][@"album"], @"mp3");
+                NSString *imageString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Image"], self.musicDArr[indexPath.row][@"song"],@"png");
+                NSString *musicString = piece_together([DirectoriesPath stringByAppendingPathComponent:@"Music"], self.musicDArr[indexPath.row][@"song"], @"mp3");
                 BOOL imageDelete = NO;
                 BOOL musicDelete = NO;
                 if ([fileManager fileExistsAtPath:imageString]) {

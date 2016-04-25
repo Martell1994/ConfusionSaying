@@ -106,8 +106,8 @@ getPlistDic
     [info setValue:pwdCell.textField.text forKey:@"pwd"];
     [info setValue:sexCell.editLabel.text forKey:@"gender"];
     [info setValue:self.bmobFileURL forKey:@"headerImage"];
-    //[info setValue:self.imageData forKey:@"headerImage"];
     [info writeToFile:self.plistPath atomically:YES];
+    [self showProgress];
     //保存至Bmob
     BmobObject *user = [BmobObject objectWithoutDatatWithClassName:ZY_User objectId:[[self PlistDic] valueForKey:@"id"]];
     [user setObject:nameCell.textField.text forKey:@"userName"];
@@ -181,20 +181,18 @@ getPlistDic
         make.centerX.mas_equalTo(0);
         make.size.mas_equalTo(CGSizeMake(100, 115));
     }];
-    [_editHeadImageBtn addTarget:self action:@selector(click) forControlEvents:UIControlEventTouchUpInside];
+    [_editHeadImageBtn addTarget:self action:@selector(headerImageClick) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)click {
+- (void)headerImageClick {
     UIImagePickerController *pc = [UIImagePickerController new];
     pc.delegate = self;
     pc.allowsEditing = YES;
     [self presentViewController:pc animated:YES completion:nil];
 }
 
-
 #pragma mark - UIImagePickerController
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    //UIImage *image = info[UIImagePickerControllerOriginalImage];
     //获取编辑后的图片
     UIImage *image = info[UIImagePickerControllerEditedImage];
     _headImageView.image = image;

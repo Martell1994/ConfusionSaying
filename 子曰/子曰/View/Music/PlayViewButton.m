@@ -14,7 +14,7 @@
     static DraggableButton *btn = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        btn = [[DraggableButton alloc] initInKeyWindowWithFrame:CGRectMake(kWindowW - 35, 25, 30, 30)];
+        btn = [[DraggableButton alloc] initInKeyWindowWithFrame:CGRectMake(kWindowW - 45, 20, 45, 45)];
         [btn setBackgroundImage:[UIImage imageNamed:@"playerBall"] forState:UIControlStateNormal];
     });
     return btn;

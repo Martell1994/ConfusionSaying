@@ -15,12 +15,14 @@
 #define noteWidth 15
 #define indexLbWidth 15
 
-@interface NewsPhotoViewController () <UIScrollViewDelegate>
+@interface NewsPhotoViewController () <UIScrollViewDelegate, UMSocialUIDelegate>
 @property (nonatomic, strong) NewsPhotoViewModel *npVM;
 @property (nonatomic, strong) NSMutableArray *imgArr;
 @property (nonatomic, strong) NSMutableArray *noteArr;
-
 @property (nonatomic, strong) NewsPhotoView *npView;
+
+@property (nonatomic,strong) NSString *urlString;
+@property (nonatomic, strong) NSString *newsTitle;
 @end
 
 @implementation NewsPhotoViewController
@@ -53,9 +55,10 @@
     return _npVM;
 }
 
-- (instancetype)initWithUrlString:(NSString *)urlString{
+- (instancetype)initWithUrlString:(NSString *)urlString withNewsTitle:(NSString *)newsTitle{
     if (self = [super init]) {
         self.urlString = urlString;
+        self.newsTitle = newsTitle;
     }
     return self;
 }
@@ -83,6 +86,18 @@
         [self initView];
     }];
     [Factory addBackItemToVC:self];
+    UIBarButtonItem *shareButtonItem = [[UIBarButtonItem alloc] bk_initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain handler:^(id sender) {
+        //友盟分享调用
+        [UMSocialSnsService presentSnsIconSheetView:self
+                                             appKey:nil
+                                          shareText:[NSString stringWithFormat:@"%@,%@",self.newsTitle,[self.npVM url]]
+                                         shareImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[self.npVM cover]]]
+                                    shareToSnsNames:@[UMShareToSina,UMShareToWechatSession,UMShareToWechatTimeline,UMShareToWechatFavorite]
+                                           delegate:self];
+        [UMSocialData defaultData].extConfig.wechatSessionData.url = [self.npVM url];
+        [UMSocialData defaultData].extConfig.wechatTimelineData.url = [self.npVM url];
+    }];
+    self.navigationItem.rightBarButtonItem = shareButtonItem;
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

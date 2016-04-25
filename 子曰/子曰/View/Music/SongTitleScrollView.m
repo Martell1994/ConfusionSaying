@@ -54,9 +54,6 @@
         [self scrollAnimation];
     }
     self.contentSize = CGSizeMake(titleLb.frame.size.width, titleLb.frame.size.height);
-    
-    
-    
 }
 
 - (void)scrollAnimation{
